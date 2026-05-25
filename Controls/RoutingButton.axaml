@@ -1,0 +1,41 @@
+<Styles xmlns="https://github.com/avaloniaui"
+		xmlns:ctrl="clr-namespace:ApoFisher.Controls"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		x:DataType="ctrl:RoutingButton"
+		>
+	<Design.PreviewWith>
+		<ctrl:RoutingButton/>
+	</Design.PreviewWith>
+	
+	<Style Selector="ctrl|RoutingButton">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Name="Border" 
+						BorderBrush="Blue"
+						BorderThickness="5"
+						Background="Aqua"
+						Margin="5" Padding="10"
+						CornerRadius="5"
+						>
+					<Grid ColumnDefinitions="3*, 6*">
+						<Image Name="Icon"
+							   Grid.Column="0"
+							   VerticalAlignment="Center"
+							   HorizontalAlignment="Left"
+							   Width="32" Height="32"
+							   />
+						<TextBlock 
+							Grid.Column="1"
+							FontSize="15"
+							FontWeight="Bold"
+							Foreground="#f50"
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center"
+							TextWrapping="Wrap"
+							Text="{TemplateBinding RoutingName}"/>
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>

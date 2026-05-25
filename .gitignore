@@ -1,0 +1,8 @@
+#Binaries
+bin/
+
+#Build
+obj/
+
+#Vs project
+.vs/

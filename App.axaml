@@ -1,0 +1,18 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:apoFisher="clr-namespace:ApoFisher"
+             x:Class="ApoFisher.App"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+	<Application.DataTemplates>
+		<apoFisher:ViewLocator/>
+	</Application.DataTemplates>
+	
+    <Application.Styles>
+        <FluentTheme />
+		<StyleInclude Source="Controls\GlossaryCategoryControl.axaml"/>
+		<StyleInclude Source="Controls\InventorySlotControl.axaml"/>
+		<StyleInclude Source="Controls\RoutingButton.axaml"/>
+    </Application.Styles>
+</Application>

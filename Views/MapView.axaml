@@ -1,0 +1,6 @@
+<UserControl 
+	xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="ApoFisher.Views.MapView">
+	<Label>hello this is mapView!</Label>
+</UserControl>

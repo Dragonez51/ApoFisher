@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ApoFisher.ViewModels"
+             xmlns:controls="clr-namespace:ApoFisher.Controls"
+             x:Class="ApoFisher.Views.GlossaryListView"
+             x:DataType="vm:GlossaryListViewModel">
+	<StackPanel>
+		<ItemsControl ItemsSource="{Binding Glossary}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<controls:GlossaryCategoryControl CategoryName="{Binding Title}"
+                                                      Entries="{Binding Entries}"
+                                                      StatusIcon="{Binding CurrentStatusIcon}"
+                                                      Visible="{Binding Visible}"
+                                                      />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</StackPanel>
+</UserControl>

@@ -1,0 +1,40 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:ApoFisher.Controls"
+        xmlns:ds="clr-namespace:ApoFisher.DataStructures"
+        >
+	<Design.PreviewWith>
+		<controls:GlossaryCategoryControl/>
+	</Design.PreviewWith>
+
+	<Style Selector="controls|GlossaryCategoryControl">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<StackPanel Orientation="Vertical" Background="Blue">
+					<Border Name="Category" BorderBrush="Blue" Background="Aquamarine" BorderThickness="3" CornerRadius="3" Padding="5" >
+						<!-- <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"> -->
+						<Grid ColumnDefinitions="8*, 2*">
+							<TextBlock Grid.Column="0" Text="{TemplateBinding CategoryName}" Foreground="Chocolate" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<Image Grid.Column="1" Source="{TemplateBinding StatusIcon}" HorizontalAlignment="Right" Margin="0,0,10, 0" Width="32" Height="32"/>
+						</Grid>
+						<!-- </StackPanel> -->
+					</Border>
+					<ItemsControl Name="ItemsControl" ItemsSource="{TemplateBinding Entries}" IsVisible="{TemplateBinding Visible}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate DataType="ds:GlossaryEntry">
+								<Border BorderBrush="Blue" BorderThickness="3">
+									<!-- <StackPanel Orientation="Horizontal" Background="Aqua"> -->
+									<Grid ColumnDefinitions="2*, 8*" Background="Aqua">
+										<Image Grid.Column="0" Margin="10,5,0,5" Source="{Binding Icon}"/>
+										<TextBlock Grid.Column="1" Margin="10,5,0,5" Foreground="Chocolate" FontWeight="Bold" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Title}"/>
+									</Grid>
+									<!-- </StackPanel> -->
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</StackPanel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>
