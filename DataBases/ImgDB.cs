@@ -63,20 +63,21 @@ public class ImgDB
         {   "Room0"                 ,       BitmapHelper.Load("Images/Room0_0.png")             },
         //          UI Elements
         {   "Logo"                  ,       BitmapHelper.Load("Images/Logo.png")                },
-        {   "SettingsLogo"          ,       BitmapHelper.Load("Images/Settings.png")            },
+        {   "SettingsLogo"          ,       BitmapHelper.Load("Images/Settings.png")            }, // Duplicate
         {   "ArrowR"                ,       BitmapHelper.Load("Images/Arrow_Right.png")         },
         {   "ArrowL"                ,       BitmapHelper.Load("Images/Arrow_Left.png")          },
         {   "ArrowU"                ,       BitmapHelper.Load("Images/Arrow_Up.png")            },
         {   "ArrowD"                ,       BitmapHelper.Load("Images/Arrow_Down.png")          },
         {   "Expand"                ,       BitmapHelper.Load("Images/ExpandIcon.png")          },
         {   "Collapse"              ,       BitmapHelper.Load("Images/ShrinkIcon.png")          },
-        {   "Settings"              ,       BitmapHelper.Load("Images/Settings.png")            },
+        {   "Settings"              ,       BitmapHelper.Load("Images/Settings.png")            }, // Duplicate
         {   "EmptySlot"             ,       BitmapHelper.Load("Images/EmptySlot.png")           },
         {   "HelmetPH"              ,       BitmapHelper.Load("Images/HelmetPH.png")            },
         {   "ChestplatePH"          ,       BitmapHelper.Load("Images/ChestplatePH.png")        },
         {   "BootsPH"               ,       BitmapHelper.Load("Images/BootsPH.png")             },
         {   "GauntletLPH"           ,       BitmapHelper.Load("Images/GauntletLPH.png")         },
         {   "GauntletRPH"           ,       BitmapHelper.Load("Images/GauntletRPH.png")         },
+        {   "Menu"                  ,       BitmapHelper.Load("Images/FishMenu.png")            },
     };
 
     private static Bitmap GetIcon(int column, int row) 

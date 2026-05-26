@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using Avalonia.Media.Imaging;
 using ApoFisher.DataStructures;
+using System.IO;
 
 namespace ApoFisher.DataBases;
 
@@ -22,9 +23,9 @@ public class InventoryItemsDB
         new (   "Iron Shield"       ,   1   ),
     };
 
-    public static Bitmap? GetItemIcon(int itemID) 
+    public static Bitmap GetItemIcon(int itemID) 
     {
-        if (itemID == -1) return null;
+        if (itemID < 0) throw new Exception("[InventoryItemsDB]=>GetItemIcon("+itemID+") | itemID cannot be < 0");
         int id = 0;
         foreach (InventoryItemTemplate item in Items) 
         {

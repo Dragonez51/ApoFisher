@@ -15,26 +15,26 @@
 					<vm:InventoryListViewModel/>
 				</UserControl>
 			</ScrollViewer>
-			<Grid Column="1" RowDefinitions="*, *">
+			<Grid Grid.Column="1" RowDefinitions="*, *">
 				
 				<!--equipment grid-->
 				<UserControl Grid.Row="0"><vm:InventoryEquipmentViewModel/></UserControl>
 				
 				<!--Statistics previewer placeholder-->
-				<Grid Row="1" RowDefinitions="*, *, *, *">
-					<Grid Row="0" ColumnDefinitions="*, *">
+				<Grid Grid.Row="1" RowDefinitions="*, *, *, *">
+					<Grid Grid.Row="0" ColumnDefinitions="*, *">
 						<TextBlock Text="Attack: 10"  Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						<TextBlock Text="Defense: 10" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</Grid>
-					<Grid Row="1" ColumnDefinitions="*, *, *">
+					<Grid Grid.Row="1" ColumnDefinitions="*, *, *">
 						<TextBlock Text="Str: 10" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						<TextBlock Text="Dex: 10" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						<TextBlock Text="Int: 10" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</Grid>
-					<Grid Row="2">
+					<Grid Grid.Row="2">
 						<TextBlock Text="(Health bar) 100/100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</Grid>
-					<Grid Row="3">
+					<Grid Grid.Row="3">
 						<TextBlock Text="(Stamina? bar) 100/100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</Grid>
 				</Grid>

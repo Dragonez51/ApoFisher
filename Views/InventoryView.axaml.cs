@@ -4,6 +4,7 @@ using ApoFisher.Controls;
 using ApoFisher.DataBases;
 using ApoFisher.ViewModels;
 using System.Diagnostics;
+using System;
 
 namespace ApoFisher.Views;
 
@@ -19,16 +20,18 @@ public partial class InventoryView : UserControl
 
     public void OnPointerPressed(object sender, PointerPressedEventArgs e)
     {
-        int SlotID = 0;
+        int? SlotID = 0;
         // Idk how to fix those warnings
-        if ((e.Source as Border) != null) SlotID = ((e.Source as Border)?.Parent as InventorySlotControl).SlotID;
-        else if ((e.Source as Image) != null) SlotID = ((((e.Source as Image)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl).SlotID;
-        else if ((e.Source as TextBlock) != null) SlotID = ((((e.Source as TextBlock)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl).SlotID;
+        if ((e.Source as Border) != null) SlotID = ((e.Source as Border)?.Parent as InventorySlotControl)?.SlotID;
+        else if ((e.Source as Image) != null) SlotID = ((((e.Source as Image)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl)?.SlotID;
+        else if ((e.Source as TextBlock) != null) SlotID = ((((e.Source as TextBlock)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl)?.SlotID;
+
+        if(SlotID is null) throw new Exception("[InventoryView]=>OnPointerPressed() || SlotID is null");
 
         if (_selectedSlotID == -1)
         {
             if (e.Properties.IsRightButtonPressed) return;
-            FirstClick(SlotID);
+            FirstClick((int)SlotID);
         }
         else
         {
@@ -38,7 +41,7 @@ public partial class InventoryView : UserControl
                 _selectedSlotID = -1;
                 return;
             }
-            SecondClick(SlotID);
+            SecondClick((int)SlotID);
         }
     }
 

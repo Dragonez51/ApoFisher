@@ -1,6 +1,4 @@
-﻿using Avalonia;
-
-namespace ApoFisher.ViewModels;
+﻿namespace ApoFisher.ViewModels;
 
 public class MapViewModel : ViewModelBase
 {

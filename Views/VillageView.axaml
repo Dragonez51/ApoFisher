@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"		
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="using:ApoFisher.ViewModels"
+			 x:Class="ApoFisher.Views.VillageView"
+			 x:DataType="vm:VillageViewModel"
+			 >
+	<Panel>
+		<Panel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250">
+			<Button HorizontalAlignment="Left"  Command="{Binding SwitchLeftPanel}" Background="Transparent"><Image Source="{Binding MenuLogo}" Width="64" Height="64"/></Button>
+			<Button Content="Show PanelR" HorizontalAlignment="Right" Command="{Binding SwitchRightPanel}"/>
+		</Panel>
+		<StackPanel HorizontalAlignment="Left" Width="300" Background="#0faf0f" IsVisible="{Binding LeftPanelVisibility}"><Label>LeftPanel</Label></StackPanel>
+		<StackPanel HorizontalAlignment="Right" Width="300" Background="#0f0faf" IsVisible="{Binding RightPanelVisibility}"><Label>RightPanel</Label></StackPanel>
+	</Panel>
+</UserControl>

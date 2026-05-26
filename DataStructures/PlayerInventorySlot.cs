@@ -31,6 +31,6 @@ public class PlayerInventorySlot
 
     private void setUpIcon() 
     {
-        Icon = InventoryItemsDB.GetItemIcon(ItemID);
+        Icon = ItemID < 0 ? null : InventoryItemsDB.GetItemIcon(ItemID);
     }
 }

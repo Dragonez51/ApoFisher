@@ -1,5 +1,4 @@
 using Avalonia.Media.Imaging;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ApoFisher.DataBases;
 using ApoFisher.DataStructures;
@@ -16,12 +15,13 @@ public partial class MainViewModel : ViewModelBase
     public Bitmap InventoryLogo { get => ImgDB.Get("InventoryLogo"); }
     public Bitmap GlossaryLogo { get => ImgDB.Get("GlossaryLogo"); }
 
-    [ObservableProperty] private ViewModelBase _currentViewModel;
+    private ViewModelBase? _currentViewModel;
+    public ViewModelBase? CurrentViewModel { get => _currentViewModel; set => SetProperty(ref _currentViewModel, value); }
 
     public MainViewModel() 
     {
-        CurrentViewModel = new MapViewModel();
         _self = this;
+        CurrentViewModel = new MapViewModel();
     }
 
     public static void Route(string pageName) 

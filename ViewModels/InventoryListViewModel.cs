@@ -1,5 +1,4 @@
 ﻿using Avalonia.Media.Imaging;
-using ApoFisher.DataBases;
 using ApoFisher.DataStructures;
 using ReactiveUI;
 using System.Collections.ObjectModel;
