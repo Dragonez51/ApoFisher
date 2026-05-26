@@ -23,6 +23,6 @@ public partial class RoutingButton : TemplatedControl
         base.OnApplyTemplate(e);
         var border = e.NameScope.Find<Border>("Border");
         border?.PointerPressed += OnPointerPressed;
-        e.NameScope?.Find<Image>("Icon")?.Source = ImgDB.Get(GetValue(RoutingNameProperty)+"Logo");
+        e?.NameScope?.Find<Image>("Icon")?.Source = ImgDB.Get(GetValue(RoutingNameProperty)+"Logo");
     }
 }

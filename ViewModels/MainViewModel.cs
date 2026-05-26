@@ -14,23 +14,29 @@ public partial class MainViewModel : ViewModelBase
     public Bitmap MapLogo { get => ImgDB.Get("MapLogo"); }
     public Bitmap InventoryLogo { get => ImgDB.Get("InventoryLogo"); }
     public Bitmap GlossaryLogo { get => ImgDB.Get("GlossaryLogo"); }
+    public Bitmap MenuLogo { get => ImgDB.Get("Menu"); }
 
     private ViewModelBase? _currentViewModel;
     public ViewModelBase? CurrentViewModel { get => _currentViewModel; set => SetProperty(ref _currentViewModel, value); }
 
+    private string? _bgtext;
+    public string? Bgtext { get => _bgtext; set => SetProperty(ref _bgtext, value); }
+
     public MainViewModel() 
     {
         _self = this;
-        CurrentViewModel = new MapViewModel();
+        string temp = "";
+        for(int i=0; i<600; i++)
+        {
+            temp+="aaaaaaaaaa";
+        }
+        Bgtext = temp;
     }
 
     public static void Route(string pageName) 
     {
         switch (pageName) 
         {
-            case "Map":
-                _self?.RouteMap();
-                break;
             case "Inventory":
                 _self?.RouteInventory();
                 break;
@@ -45,7 +51,7 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    [RelayCommand] public void RouteMap() => CurrentViewModel = new MapViewModel();
+    // [RelayCommand] public void RouteMap() => CurrentViewModel = new MapViewModel();
     [RelayCommand] public void RouteInventory() => CurrentViewModel = new InventoryViewModel();
     [RelayCommand] public void RouteGlossary() => CurrentViewModel = new GlossaryViewModel();
     [RelayCommand] public void RouteSettings() => CurrentViewModel = new SettingsViewModel();
