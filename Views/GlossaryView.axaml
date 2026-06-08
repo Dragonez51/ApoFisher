@@ -12,7 +12,7 @@
 				<vm:GlossaryListViewModel/>
 			</UserControl>
 		</ScrollViewer>
-		<Grid Column="1" RowDefinitions="3*, 2*, 5*">
+		<Grid Grid.Column="1" RowDefinitions="3*, 2*, 5*">
 			<Image Grid.Row="0" Source="{Binding ItemIcon}" Width="128" Height="128" Stretch="Uniform"/>
 			<TextBlock Grid.Row="1" Text="{Binding Title}" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
 			<TextBlock Grid.Row="2" Text="{Binding Description}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap"/>

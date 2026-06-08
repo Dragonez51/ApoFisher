@@ -19,7 +19,7 @@ public class InventoryItemTemplate
         countMaxQuantityZeros();
     }
 
-    private void countMaxQuantityZeros()
+    private void countMaxQuantityZeros() //idk what is this code bruh
     {
         int temp = MaxQuantity;
         int count = 0;

@@ -1,6 +1,4 @@
-﻿using ApoFisher.ViewModels;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
 
 namespace ApoFisher.DataStructures;
 
@@ -63,14 +61,12 @@ public class PlayerInventory
     {
         int armorID = (firstID + 2) * -1;
 
-        //Debug.WriteLine("armorID: " + armorID + " ArmorSlots[armorID]");
         PlayerInventorySlot temp        = ArmorSlots[armorID];
         ArmorSlots[armorID]             = InventorySlots[secondID];
         InventorySlots[secondID]        = temp;
         ArmorSlots[armorID].SlotID      = firstID;
         InventorySlots[secondID].SlotID = secondID;
 
-        //InventoryEquipmentViewModel.UpdateIcon(armorID);
     }
 
     private void AddTwoItems() { InventorySlots[0] = new PlayerInventorySlot(0, 1); InventorySlots[1] = new PlayerInventorySlot(1, 6); }

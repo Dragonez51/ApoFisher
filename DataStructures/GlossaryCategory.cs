@@ -10,7 +10,16 @@ public partial class GlossaryCategory : ObservableObject
     public string Title { get; set; }
     public ObservableCollection<GlossaryEntry> Entries { get; }
 
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(CurrentStatusIcon))] private bool _visible = false;
+    private bool _visible = false;
+    public bool Visible 
+    { 
+        get => _visible; 
+        set 
+        {
+            SetProperty(ref _visible, value);
+            OnPropertyChanged(nameof(CurrentStatusIcon)); // inform CurrentStatus Icon to reload.
+        } 
+    }
     
     public Bitmap CurrentStatusIcon { get => Visible ? ColapseIcon : ExpandIcon; }
     private Bitmap ExpandIcon { get => ImgDB.Get("Expand"); }

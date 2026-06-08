@@ -1,5 +1,4 @@
 using Avalonia.Media.Imaging;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ApoFisher.DataBases;
 using ApoFisher.DataStructures;
@@ -8,29 +7,41 @@ namespace ApoFisher.ViewModels;
 
 public partial class MainViewModel : ViewModelBase 
 {
-    public static Player Player = new Player(40);
     private static MainViewModel? _self;
+    public static Player Player = new Player(40);
+
+    public int HP { get => Player.GetHP(); }
+    public int MaxHP { get => Player.GetMaxHP(); }
+    public int Stamina { get => Player.GetStamina(); }
+    public int MaxStamina { get => Player.GetMaxStamina(); }
 
     public Bitmap AppLogo { get => ImgDB.Get("Logo"); }
     public Bitmap MapLogo { get => ImgDB.Get("MapLogo"); }
     public Bitmap InventoryLogo { get => ImgDB.Get("InventoryLogo"); }
     public Bitmap GlossaryLogo { get => ImgDB.Get("GlossaryLogo"); }
+    public Bitmap MenuLogo { get => ImgDB.Get("Menu"); }
 
-    [ObservableProperty] private ViewModelBase _currentViewModel;
+    private ViewModelBase? _currentViewModel;
+    public ViewModelBase? CurrentViewModel { get => _currentViewModel; set => SetProperty(ref _currentViewModel, value); }
+
+    private string? _bgtext;
+    public string? Bgtext { get => _bgtext; set => SetProperty(ref _bgtext, value); }
 
     public MainViewModel() 
     {
-        CurrentViewModel = new MapViewModel();
         _self = this;
+        string temp = "";
+        // for(int i=0; i<600; i++)
+        // {
+            // temp+=".>.>.>.>.>.>.>.>.>.>.>.>.>.>.>.>.>.>";
+        // }
+        Bgtext = temp;
     }
 
     public static void Route(string pageName) 
     {
         switch (pageName) 
         {
-            case "Map":
-                _self?.RouteMap();
-                break;
             case "Inventory":
                 _self?.RouteInventory();
                 break;
@@ -45,8 +56,16 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    [RelayCommand] public void RouteMap() => CurrentViewModel = new MapViewModel();
-    [RelayCommand] public void RouteInventory() => CurrentViewModel = new InventoryViewModel();
-    [RelayCommand] public void RouteGlossary() => CurrentViewModel = new GlossaryViewModel();
+    // [RelayCommand] public void RouteMap() => CurrentViewModel = new MapViewModel();
+    [RelayCommand] public void RouteInventory()
+    { 
+        if(CurrentViewModel is InventoryViewModel) { CurrentViewModel = null; return; }
+        CurrentViewModel = new InventoryViewModel();
+    }
+    [RelayCommand] public void RouteGlossary()
+    { 
+        if(CurrentViewModel is GlossaryViewModel) { CurrentViewModel = null; return; }
+        CurrentViewModel = new GlossaryViewModel();    
+    }
     [RelayCommand] public void RouteSettings() => CurrentViewModel = new SettingsViewModel();
 }

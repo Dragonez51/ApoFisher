@@ -1,7 +1,5 @@
 ﻿using Avalonia.Media.Imaging;
-using ApoFisher.DataBases;
 using ApoFisher.DataStructures;
-using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
@@ -17,13 +15,13 @@ public partial class InventoryListViewModel : ViewModelBase
     public int ItemIconSize             { get => InventoryViewModel.ItemIconSize;       }
     public int CanvasOffset             { get => InventoryViewModel.CanvasOffset;       }
 
-    public ICommand EquipCommand        { get; }
-    public ICommand DiscardCommand      { get; }
+    public ICommand? EquipCommand        { get; }
+    public ICommand? DiscardCommand      { get; }
 
     public InventoryListViewModel() 
     {
-        EquipCommand = ReactiveCommand.Create(Equip);
-        DiscardCommand = ReactiveCommand.Create(Discard);
+        // EquipCommand = ReactiveCommand.Create(Equip);
+        // DiscardCommand = ReactiveCommand.Create(Discard);
     }
 
     public void Equip() 

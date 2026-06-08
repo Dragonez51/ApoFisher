@@ -1,11 +1,10 @@
-﻿using Avalonia;
 using Avalonia.Controls;
 
 namespace ApoFisher.Views;
 
-public partial class MapView : UserControl 
+public partial class VillageView : UserControl
 {
-    public MapView() 
+    public VillageView()
     {
         InitializeComponent();
     }
