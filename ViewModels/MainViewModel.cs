@@ -7,8 +7,13 @@ namespace ApoFisher.ViewModels;
 
 public partial class MainViewModel : ViewModelBase 
 {
-    public static Player Player = new Player(40);
     private static MainViewModel? _self;
+    public static Player Player = new Player(40);
+
+    public int HP { get => Player.GetHP(); }
+    public int MaxHP { get => Player.GetMaxHP(); }
+    public int Stamina { get => Player.GetStamina(); }
+    public int MaxStamina { get => Player.GetMaxStamina(); }
 
     public Bitmap AppLogo { get => ImgDB.Get("Logo"); }
     public Bitmap MapLogo { get => ImgDB.Get("MapLogo"); }
@@ -26,10 +31,10 @@ public partial class MainViewModel : ViewModelBase
     {
         _self = this;
         string temp = "";
-        for(int i=0; i<600; i++)
-        {
-            temp+="aaaaaaaaaa";
-        }
+        // for(int i=0; i<600; i++)
+        // {
+            // temp+=".>.>.>.>.>.>.>.>.>.>.>.>.>.>.>.>.>.>";
+        // }
         Bgtext = temp;
     }
 
@@ -52,7 +57,15 @@ public partial class MainViewModel : ViewModelBase
     }
 
     // [RelayCommand] public void RouteMap() => CurrentViewModel = new MapViewModel();
-    [RelayCommand] public void RouteInventory() => CurrentViewModel = new InventoryViewModel();
-    [RelayCommand] public void RouteGlossary() => CurrentViewModel = new GlossaryViewModel();
+    [RelayCommand] public void RouteInventory()
+    { 
+        if(CurrentViewModel is InventoryViewModel) { CurrentViewModel = null; return; }
+        CurrentViewModel = new InventoryViewModel();
+    }
+    [RelayCommand] public void RouteGlossary()
+    { 
+        if(CurrentViewModel is GlossaryViewModel) { CurrentViewModel = null; return; }
+        CurrentViewModel = new GlossaryViewModel();    
+    }
     [RelayCommand] public void RouteSettings() => CurrentViewModel = new SettingsViewModel();
 }

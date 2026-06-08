@@ -9,36 +9,10 @@
 	x:Class="ApoFisher.Views.InventoryView"
 	>
 	<Border PointerPressed="OnPointerPressed">
-		<Grid ColumnDefinitions="*, 300">
-			<ScrollViewer Grid.Column="0">
-				<UserControl>
-					<vm:InventoryListViewModel/>
-				</UserControl>
-			</ScrollViewer>
-			<Grid Grid.Column="1" RowDefinitions="*, *">
-				
-				<!--equipment grid-->
-				<UserControl Grid.Row="0"><vm:InventoryEquipmentViewModel/></UserControl>
-				
-				<!--Statistics previewer placeholder-->
-				<Grid Grid.Row="1" RowDefinitions="*, *, *, *">
-					<Grid Grid.Row="0" ColumnDefinitions="*, *">
-						<TextBlock Text="Attack: 10"  Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-						<TextBlock Text="Defense: 10" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Grid>
-					<Grid Grid.Row="1" ColumnDefinitions="*, *, *">
-						<TextBlock Text="Str: 10" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-						<TextBlock Text="Dex: 10" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-						<TextBlock Text="Int: 10" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Grid>
-					<Grid Grid.Row="2">
-						<TextBlock Text="(Health bar) 100/100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Grid>
-					<Grid Grid.Row="3">
-						<TextBlock Text="(Stamina? bar) 100/100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Grid>
-				</Grid>
-			</Grid>
-		</Grid>
+		<ScrollViewer Grid.Column="0">
+			<UserControl>
+				<vm:InventoryListViewModel/>
+			</UserControl>
+		</ScrollViewer>
 	</Border>
 </UserControl>

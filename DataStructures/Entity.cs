@@ -2,20 +2,21 @@
 
 public class Entity 
 {
-    private Statistics Statistics;
-    private int AttackPower;
+    private Statistics _statistics;
+    private int _attackPower;
+    
     public Entity() 
     {
-        Statistics = new Statistics();
-        AttackPower = 3;
+        _statistics = new Statistics();
+        _attackPower = 3;
     }
 
-    public Entity(int strength, int dexterity, int intelligence, int maxHealth)
+    public Entity(int strength, int dexterity, int intelligence, int maxHealth, int maxStamina)
     {
-        Statistics = new Statistics(strength, dexterity, intelligence, maxHealth);
-        AttackPower = 3;
+        _statistics = new Statistics(strength, dexterity, intelligence, maxHealth, maxStamina);
+        _attackPower = 3;
     }
 
-    public Statistics getStats() => this.Statistics;
-    public int getAttackPower() => AttackPower;
+    public Statistics GetStatistics() => _statistics;
+    public int GetAttackPower() => _attackPower;
 }
