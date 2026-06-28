@@ -23,19 +23,30 @@ public partial class MainViewModel : ViewModelBase
 
     private ViewModelBase? _currentViewModel;
     public ViewModelBase? CurrentViewModel { get => _currentViewModel; set => SetProperty(ref _currentViewModel, value); }
+    private ViewModelBase? _currentLocation;
+    public ViewModelBase? CurrentLocation { get => _currentLocation; set => SetProperty(ref _currentLocation, value); }
 
-    private string? _bgtext;
-    public string? Bgtext { get => _bgtext; set => SetProperty(ref _bgtext, value); }
-
-    public MainViewModel() 
+    public MainViewModel()
     {
         _self = this;
-        string temp = "";
-        // for(int i=0; i<600; i++)
-        // {
-            // temp+=".>.>.>.>.>.>.>.>.>.>.>.>.>.>.>.>.>.>";
-        // }
-        Bgtext = temp;
+        // CurrentLocation = new VillageViewModel(); // That's the main location.
+        // for testing we will set it to TraverseViewModel();
+        CurrentLocation = new TraverseViewModel();
+    }
+
+    public static void RouteLocation(string locationName)
+    {
+        switch (locationName)
+        {
+            case "Traverse":
+                _self?.RouteTraverse();
+                break;
+            case "Village":
+                _self?.RouteVillage();
+                break;
+            default:
+                throw new System.Exception("[MainViewModel] Invalid Route() argument => "+locationName);
+        }
     }
 
     public static void Route(string pageName) 
@@ -52,7 +63,7 @@ public partial class MainViewModel : ViewModelBase
                 _self?.RouteSettings();
                 break;
             default:
-                throw new System.Exception("Invalid Route() argument!");
+                throw new System.Exception("[MainViewModel] Invalid Route() argument!");
         }
     }
 
@@ -68,4 +79,6 @@ public partial class MainViewModel : ViewModelBase
         CurrentViewModel = new GlossaryViewModel();    
     }
     [RelayCommand] public void RouteSettings() => CurrentViewModel = new SettingsViewModel();
+    [RelayCommand] public void RouteTraverse() => CurrentLocation = new TraverseViewModel();
+    [RelayCommand] public void RouteVillage() => CurrentLocation = new VillageViewModel();
 }
