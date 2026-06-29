@@ -1,6 +1,12 @@
 using System;
+using System.Numerics;
+using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 
 namespace ApoFisher.ViewModels;
@@ -15,22 +21,32 @@ public partial class TraverseViewModel : ViewModelBase
 {
     private readonly int MAP_WIDTH = 500;
     private readonly int MAP_HEIGHT = 500;
+    private readonly int BUTTON_SIZE = 50;
     private int MAP_EDGE_BOUND;
+
+    // until the map has 5 static points, 
+    // the location tab is also static.
+    private Point[] _locations = new Point[5];
+
     private Canvas? _map;
     public Canvas? Map { get => _map; set => SetProperty(ref _map, value); }
-
+    
     public TraverseViewModel()
     {
-        MAP_EDGE_BOUND = MAP_WIDTH / 5; // aprox. 20%;
         SetupMap();
         GenerateEdgeLocations();
         GenerateCenterLocations();
+        // GenerateRoadsInOrder();
+        GenerateRoadsv2();
     }
 
     private void SetupMap()
     {
         Map = new Canvas();
-        
+        // _locations = new Point[5];
+
+        MAP_EDGE_BOUND = MAP_WIDTH / 5; // aprox. 20%;
+
         Map?.Width = MAP_WIDTH;
         Map?.Height = MAP_HEIGHT;
 
@@ -40,68 +56,84 @@ public partial class TraverseViewModel : ViewModelBase
     private void GenerateEdgeLocations()
     {
         // =======================================================
-        // NOTE: check if possible to create in a single for loop.
-        // Magic numbers: 1 - (MAP_HEIGHT/5): it represents 20% 
-        // bound from map edge.
+        // NOTE: check if possible to create in a single for loop. in progress...
         // =======================================================
         Random rand = new Random();
 
-        // Generate random point on the left side of the map excluding MAP_EDGE_BOUNDs.
-
-        // Calculate bounds.        
+        long x;
+        long y;
+        Button point;
         var heightMax = MAP_HEIGHT - (2*MAP_EDGE_BOUND);
-        
-        // Create new point with random x and y.
-        var x = rand.NextInt64(MAP_EDGE_BOUND);
-        var y = rand.NextInt64(heightMax) + MAP_EDGE_BOUND;
 
-        Button point = new Button();
-        point.Content = "X";
-        point[Canvas.LeftProperty] = x;
-        point[Canvas.TopProperty] = y;
-        
-        Map?.Children.Add(point);
+        //generate the same shit but within a single for loop.
+        for(int i=0; i<4; i++)
+        {
+            // generate random points within the bounds.
+            // buttons on right and bottom edge
+            // require an offset to not go out of bounds.
+            if(i % 2 == 0)
+            {
+                x = rand.NextInt64(MAP_EDGE_BOUND);
+            }
+            else
+            {
+                x = rand.NextInt64(MAP_EDGE_BOUND-BUTTON_SIZE);
+            }
+            y = rand.NextInt64(heightMax) + MAP_EDGE_BOUND;
 
-        // Let's try mirroring the y point of the method overhead.
-        // Note 1. Mirroring doesn't work since it will be literally mirrored. 
-        // We have to only reroll the position.
-        // Note 2. Reroll Y position too lmao.
-        x = rand.NextInt64(MAP_EDGE_BOUND);
-        y = rand.NextInt64(heightMax) + MAP_EDGE_BOUND;
+            // generate a styled button.
+            point = new Button
+            {
+                Content="X",
+                Width = BUTTON_SIZE,
+                Height = BUTTON_SIZE,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                FontSize = BUTTON_SIZE/2,
+                FontWeight = FontWeight.Bold,
+                Foreground = Brush.Parse("#930000"),
+                ZIndex = 1
+            };
 
-        point = new Button();
-        point.Content = "X";
-        point[Canvas.RightProperty] = x;
-        point[Canvas.TopProperty] = y;
+            // NOTE 1: Buttons are drawn from their top left corner.
+            // This means that both bottom and right edge points
+            // can spawn in a way where the button is out of bounds for map.
+            // We can just offset them by 
+            // their width (for right edge)
+            // and by their height (for bottom edge)
+            // This bug exists since we don't use the Right property that
+            // presumably happens to offset the button from it's right corner
+            // making it impossible to go out of bounds.
+            // .
+            // NOTE 2: I feel like we can make it without the switch loop
+            // but I am not going to fix it right now. 
+            // This could prepare it tho for a bigger map.
 
-        Map?.Children.Add(point);
+            // Switch between different iterations to
+            // decide upon the positioning.
+            switch (i)
+            {
+                case 0:
+                    point[Canvas.LeftProperty] = x;
+                    point[Canvas.TopProperty] = y;
+                    break;
+                case 1:
+                    point[Canvas.LeftProperty] = x + (MAP_WIDTH - MAP_EDGE_BOUND);
+                    point[Canvas.TopProperty] = y;
+                    break;
+                case 2:
+                    point[Canvas.LeftProperty] = y;
+                    point[Canvas.TopProperty] = x;
+                    break;
+                case 3:
+                    point[Canvas.LeftProperty] = y;
+                    point[Canvas.TopProperty] = x + (MAP_WIDTH - MAP_EDGE_BOUND);
+                    break;
+            }
 
-        // Now we have to do the same but with the other walls (Top and bottom)
-        // To do so, we have to technically simply swap x and y?
-
-        x = rand.NextInt64(MAP_EDGE_BOUND);
-        y = rand.NextInt64(heightMax) + MAP_EDGE_BOUND;
-
-        point = new Button();
-        point.Content = "X";
-        point[Canvas.LeftProperty] = y;
-        point[Canvas.TopProperty] = x;
-
-        Map?.Children.Add(point);
-
-        // Okay, so we just now swap TopProperty with Bottom property lmao
-
-        x = rand.NextInt64(MAP_EDGE_BOUND);
-        y = rand.NextInt64(heightMax) + MAP_EDGE_BOUND;
-
-        point = new Button();
-        point.Content = "X";
-        point[Canvas.LeftProperty] = y;
-        point[Canvas.BottomProperty] = x;
-
-        Map?.Children.Add(point);
-
-        // Works like a charm. Now I can call it the edge generator.
+            Map?.Children.Add(point);
+            _locations?[i] = new Point(Canvas.GetLeft(point), Canvas.GetTop(point));
+        }
     } 
 
     private void GenerateCenterLocations()
@@ -116,25 +148,128 @@ public partial class TraverseViewModel : ViewModelBase
         // v1.0 -> let's do a single target.
         // =================================
 
-        var heightBound = MAP_HEIGHT - (3 * MAP_EDGE_BOUND);
-        var widthBound = MAP_WIDTH - (3 * MAP_EDGE_BOUND);
+        // A little inset has been added here so that the points 
+        // do not get on top of each other.
 
-        var y = rand.NextInt64(heightBound) + MAP_EDGE_BOUND;
+        var heightBound = MAP_HEIGHT - (2 * MAP_EDGE_BOUND) - BUTTON_SIZE;
+        var widthBound = MAP_WIDTH - (2 * MAP_EDGE_BOUND) - BUTTON_SIZE;
+
         var x = rand.NextInt64(widthBound) + MAP_EDGE_BOUND;
+        var y = rand.NextInt64(heightBound) + MAP_EDGE_BOUND;
 
-        Button point = new Button();
-        point.Content = "X";
+        Button point = new Button
+        {
+            Content="X",
+            Width = BUTTON_SIZE,
+            Height = BUTTON_SIZE,
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            VerticalContentAlignment = VerticalAlignment.Center,
+            FontSize = BUTTON_SIZE/2,
+            FontWeight = FontWeight.Bold,
+            Foreground = Brush.Parse("#930000"),
+            ZIndex = 1
+        };
         point[Canvas.LeftProperty] = x;
         point[Canvas.TopProperty] = y;
 
-        _map?.Children.Add(point);
+        Map?.Children.Add(point);
+
+        // Here we don't have to get the property of this point
+        // since there's no mixing x and y.
+        _locations[4] = new Point(x, y);
 
         //Single target done.
     }
 
-    private void GenerateRoads()
+    private void GenerateRoadsInOrder()
     {
+        //  To do this generation, we need to change some things
+        //  in previous methods.
+        //  A tab is required for remembering each location position 
+        //  to create a road from. DONE
+        //  Thus we also need to have a data structure for those points.
+        //  That is Vector2. DONE
+        //  PROBLEM 1.: not every point is presented the same way.
+        //  Some points are presented with Left property and some with Right.
+        //  This creates a problem if we want to have
+        //  all the locations in the same format. DONE
+        //  We need to recreate the whole process with a simple for loop
+        //  and a little bit more calculations. DONE
+
+        // offsets:
+        int offsetX = BUTTON_SIZE/2;
+        int offsetY = BUTTON_SIZE/2;
+        for(int i=0; i<_locations.Length-1; i++)
+        {
+            Line line = new Line();
+            // styling:
+            line.Stroke = Brush.Parse("#000");
+            line.StrokeThickness = 3;
+            line.StrokeLineCap = PenLineCap.Round;
+            var dashPattern = new AvaloniaList<double>
+            {
+                2.5,
+            };
+            line.StrokeDashArray = dashPattern;
+            line.ZIndex = 0;
+            // locations:
+            // NOTE: We can offset these to 
+            // get the line to start from 
+            // the center and end in the center.
+            line.StartPoint = new Point(_locations[i].X + offsetX, _locations[i].Y + offsetY);
+            line.EndPoint = new Point(_locations[i+1].X + offsetX, _locations[i+1].Y + offsetY);
+
+            Map?.Children.Add(line);
+        }
+        // line.StartPoint = _locations[0];
+    }
+
+    private void GenerateRoadsv2()
+    {
+        int offsetX = BUTTON_SIZE/2;
+        int offsetY = BUTTON_SIZE/2;
         
+        // L = 0 | R = 1 | T = 2 | B = 3 | C = 4
+        // 0 => 2 | 2 => 1 | 1 => 3 | 3 => 4 |
+
+        int[] pointIndex = new int[]{ 0, 2, 1, 3, 4 };
+
+        // line.StartPoint = new Point(_locations[0].X + offsetX, _locations[0].Y + offsetY);
+        // line.EndPoint = new Point(_locations[2].X + offsetX, _locations[2].Y + offsetY);
+        // Map?.Children.Add(line);
+        
+        // line.StartPoint = new Point(_locations[2].X + offsetX, _locations[2].Y + offsetY);
+        // line.EndPoint = new Point(_locations[1].X + offsetX, _locations[1].Y + offsetY);
+        // Map?.Children.Add(line);
+
+        // line.StartPoint = new Point(_locations[1].X + offsetX, _locations[1].Y + offsetY);
+        // line.EndPoint = new Point(_locations[3].X + offsetX, _locations[3].Y + offsetY);
+        // Map?.Children.Add(line);
+
+        // line.StartPoint = new Point(_locations[3].X + offsetX, _locations[3].Y + offsetY);
+        // line.EndPoint = new Point(_locations[4].X + offsetX, _locations[4].Y + offsetY);
+        // Map?.Children.Add(line);
+
+        for(int i=0; i<_locations.Length-1; i++)
+        {
+            Line line = new Line();
+            // styling:
+            line.Stroke = Brush.Parse("#000");
+            line.StrokeThickness = 3;
+            line.StrokeLineCap = PenLineCap.Round;
+            var dashPattern = new AvaloniaList<double>
+            {
+                2.5,
+            };
+            line.StrokeDashArray = dashPattern;
+            line.ZIndex = 0;
+
+            line.StartPoint = new Point(_locations[pointIndex[i]].X + offsetX, _locations[pointIndex[i]].Y + offsetY);
+            line.EndPoint = new Point(_locations[pointIndex[i+1]].X + offsetX, _locations[pointIndex[i+1]].Y + offsetY);
+            
+            Map?.Children.Add(line);
+        }
+
     }
 
     [RelayCommand] public void RouteVillage() => MainViewModel.RouteLocation("Village");
