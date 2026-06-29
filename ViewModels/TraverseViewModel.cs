@@ -1,12 +1,11 @@
 using System;
-using System.Numerics;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 
 namespace ApoFisher.ViewModels;
@@ -22,6 +21,7 @@ public partial class TraverseViewModel : ViewModelBase
     private readonly int MAP_WIDTH = 500;
     private readonly int MAP_HEIGHT = 500;
     private readonly int BUTTON_SIZE = 50;
+    private int LINE_CENTER_OFFSET;
     private int MAP_EDGE_BOUND;
 
     // until the map has 5 static points, 
@@ -37,7 +37,8 @@ public partial class TraverseViewModel : ViewModelBase
         GenerateEdgeLocations();
         GenerateCenterLocations();
         // GenerateRoadsInOrder();
-        GenerateRoadsv2();
+        // GenerateRoadsv2();
+        GenerateRoadsProximity();
     }
 
     private void SetupMap()
@@ -46,6 +47,7 @@ public partial class TraverseViewModel : ViewModelBase
         // _locations = new Point[5];
 
         MAP_EDGE_BOUND = MAP_WIDTH / 5; // aprox. 20%;
+        LINE_CENTER_OFFSET = BUTTON_SIZE / 2;
 
         Map?.Width = MAP_WIDTH;
         Map?.Height = MAP_HEIGHT;
@@ -226,29 +228,7 @@ public partial class TraverseViewModel : ViewModelBase
 
     private void GenerateRoadsv2()
     {
-        int offsetX = BUTTON_SIZE/2;
-        int offsetY = BUTTON_SIZE/2;
-        
-        // L = 0 | R = 1 | T = 2 | B = 3 | C = 4
-        // 0 => 2 | 2 => 1 | 1 => 3 | 3 => 4 |
-
-        int[] pointIndex = new int[]{ 0, 2, 1, 3, 4 };
-
-        // line.StartPoint = new Point(_locations[0].X + offsetX, _locations[0].Y + offsetY);
-        // line.EndPoint = new Point(_locations[2].X + offsetX, _locations[2].Y + offsetY);
-        // Map?.Children.Add(line);
-        
-        // line.StartPoint = new Point(_locations[2].X + offsetX, _locations[2].Y + offsetY);
-        // line.EndPoint = new Point(_locations[1].X + offsetX, _locations[1].Y + offsetY);
-        // Map?.Children.Add(line);
-
-        // line.StartPoint = new Point(_locations[1].X + offsetX, _locations[1].Y + offsetY);
-        // line.EndPoint = new Point(_locations[3].X + offsetX, _locations[3].Y + offsetY);
-        // Map?.Children.Add(line);
-
-        // line.StartPoint = new Point(_locations[3].X + offsetX, _locations[3].Y + offsetY);
-        // line.EndPoint = new Point(_locations[4].X + offsetX, _locations[4].Y + offsetY);
-        // Map?.Children.Add(line);
+        int[] pointIndex = { 0, 2, 1, 3, 4 };
 
         for(int i=0; i<_locations.Length-1; i++)
         {
@@ -264,12 +244,95 @@ public partial class TraverseViewModel : ViewModelBase
             line.StrokeDashArray = dashPattern;
             line.ZIndex = 0;
 
-            line.StartPoint = new Point(_locations[pointIndex[i]].X + offsetX, _locations[pointIndex[i]].Y + offsetY);
-            line.EndPoint = new Point(_locations[pointIndex[i+1]].X + offsetX, _locations[pointIndex[i+1]].Y + offsetY);
+            line.StartPoint = new Point(_locations[pointIndex[i]].X + LINE_CENTER_OFFSET, _locations[pointIndex[i]].Y + LINE_CENTER_OFFSET);
+            line.EndPoint = new Point(_locations[pointIndex[i+1]].X + LINE_CENTER_OFFSET, _locations[pointIndex[i+1]].Y + LINE_CENTER_OFFSET);
             
             Map?.Children.Add(line);
         }
 
+    }
+
+    private void GenerateRoadsProximity()
+    {
+        // This generator is meant to connect
+        // only the closest points.
+
+        AvaloniaList<string> connections = new AvaloniaList<string>();
+
+        for(int i=0; i<4; i++)
+        {
+            double minDistance = MAP_WIDTH;
+            int minIndex = -1;
+
+            double Ax = _locations[i%_locations.Length].X;
+            double Ay = _locations[i%_locations.Length].Y;
+
+            for(int j=0; j<_locations.Length; j++)
+            {
+                // Do not check yourself.
+                if(i%_locations.Length == j) continue;
+                
+                // Do not check if there is already a connection between these two.
+                bool skip = false;
+                foreach(string connection in connections)
+                {
+                    if(connection.Equals(i%_locations.Length+""+j) || connection.Equals(j + "" + i%_locations.Length))
+                    {
+                        skip = true;
+                        break;
+                    }
+                }
+                if(skip) continue;
+
+                // All good, calculate distance.
+                double Bx = _locations[j].X;
+                double By = _locations[j].Y;
+
+                double differenceX = 0;
+                if(Ax > Bx) differenceX = Ax - Bx;
+                if(Ax < Bx) differenceX = Bx - Ax;
+                double differenceY = 0;
+                if(Ay > By) differenceY = Ay - By;
+                if(Ay < By) differenceY = By - Ay;
+
+                double distance = Math.Sqrt((differenceX*differenceX) + (differenceY*differenceY));
+
+                // If it is smaller than the smallest, 
+                // save which one it is and its distance.
+                if(distance < minDistance)
+                {
+                    minDistance = distance;
+                    minIndex = j; 
+                } 
+            }
+
+            // if the smallest distance has not been found, throw an exception.
+            if(minIndex == -1) throw new Exception("[TraverseViewModel](GenerateRoadProximity) minIndex == -1 => couldn't find a smaller distance than MAP_WIDTH ("+MAP_WIDTH+")");
+            
+            // if the smallest distance has not been found, skip this location?
+            // if(minIndex == -1) continue;
+
+            connections.Add(i%_locations.Length+""+minIndex);
+
+            Debug.WriteLine(i%_locations.Length+"<=>"+minIndex);
+
+            Line line = new Line();
+            // styling:
+            line.Stroke = Brush.Parse("#000");
+            line.StrokeThickness = 3;
+            line.StrokeLineCap = PenLineCap.Round;
+            var dashPattern = new AvaloniaList<double>
+            {
+                2.5,
+            };
+            line.StrokeDashArray = dashPattern;
+            line.ZIndex = 0;
+
+            line.StartPoint = new Point(_locations[i%_locations.Length].X + LINE_CENTER_OFFSET, _locations[i%_locations.Length].Y + LINE_CENTER_OFFSET);
+            line.EndPoint = new Point(_locations[minIndex].X + LINE_CENTER_OFFSET, _locations[minIndex].Y + LINE_CENTER_OFFSET);
+            
+            Map?.Children.Add(line);
+        }
     }
 
     [RelayCommand] public void RouteVillage() => MainViewModel.RouteLocation("Village");
