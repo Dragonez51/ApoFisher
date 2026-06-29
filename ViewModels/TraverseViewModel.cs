@@ -24,6 +24,7 @@ public partial class TraverseViewModel : ViewModelBase
         MAP_EDGE_BOUND = MAP_WIDTH / 5; // aprox. 20%;
         SetupMap();
         GenerateEdgeLocations();
+        GenerateCenterLocations();
     }
 
     private void SetupMap()
@@ -45,15 +46,14 @@ public partial class TraverseViewModel : ViewModelBase
         // =======================================================
         Random rand = new Random();
 
-        // Generate random point on the left side of the map excluding corners.
+        // Generate random point on the left side of the map excluding MAP_EDGE_BOUNDs.
 
         // Calculate bounds.        
-        var corner = MAP_HEIGHT/5;
-        var heightMax = MAP_HEIGHT - (2*corner);
+        var heightMax = MAP_HEIGHT - (2*MAP_EDGE_BOUND);
         
         // Create new point with random x and y.
-        var x = rand.NextInt64(MAP_WIDTH/5);
-        var y = rand.NextInt64(heightMax) + corner;
+        var x = rand.NextInt64(MAP_EDGE_BOUND);
+        var y = rand.NextInt64(heightMax) + MAP_EDGE_BOUND;
 
         Button point = new Button();
         point.Content = "X";
@@ -66,8 +66,8 @@ public partial class TraverseViewModel : ViewModelBase
         // Note 1. Mirroring doesn't work since it will be literally mirrored. 
         // We have to only reroll the position.
         // Note 2. Reroll Y position too lmao.
-        x = rand.NextInt64(MAP_WIDTH/5);
-        y = rand.NextInt64(heightMax) + corner;
+        x = rand.NextInt64(MAP_EDGE_BOUND);
+        y = rand.NextInt64(heightMax) + MAP_EDGE_BOUND;
 
         point = new Button();
         point.Content = "X";
@@ -79,8 +79,8 @@ public partial class TraverseViewModel : ViewModelBase
         // Now we have to do the same but with the other walls (Top and bottom)
         // To do so, we have to technically simply swap x and y?
 
-        x = rand.NextInt64(MAP_WIDTH/5);
-        y = rand.NextInt64(heightMax) + corner;
+        x = rand.NextInt64(MAP_EDGE_BOUND);
+        y = rand.NextInt64(heightMax) + MAP_EDGE_BOUND;
 
         point = new Button();
         point.Content = "X";
@@ -91,8 +91,8 @@ public partial class TraverseViewModel : ViewModelBase
 
         // Okay, so we just now swap TopProperty with Bottom property lmao
 
-        x = rand.NextInt64(MAP_WIDTH/5);
-        y = rand.NextInt64(heightMax) + corner;
+        x = rand.NextInt64(MAP_EDGE_BOUND);
+        y = rand.NextInt64(heightMax) + MAP_EDGE_BOUND;
 
         point = new Button();
         point.Content = "X";
@@ -109,6 +109,32 @@ public partial class TraverseViewModel : ViewModelBase
         // Here we have to get a random position for bounds 
         // that present center piece. That's why the magic number
         // in (GenerateEdgeLocations) is problematic.
+
+        Random rand = new Random();
+
+        // =================================
+        // v1.0 -> let's do a single target.
+        // =================================
+
+        var heightBound = MAP_HEIGHT - (3 * MAP_EDGE_BOUND);
+        var widthBound = MAP_WIDTH - (3 * MAP_EDGE_BOUND);
+
+        var y = rand.NextInt64(heightBound) + MAP_EDGE_BOUND;
+        var x = rand.NextInt64(widthBound) + MAP_EDGE_BOUND;
+
+        Button point = new Button();
+        point.Content = "X";
+        point[Canvas.LeftProperty] = x;
+        point[Canvas.TopProperty] = y;
+
+        _map?.Children.Add(point);
+
+        //Single target done.
+    }
+
+    private void GenerateRoads()
+    {
+        
     }
 
     [RelayCommand] public void RouteVillage() => MainViewModel.RouteLocation("Village");

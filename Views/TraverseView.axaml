@@ -3,12 +3,12 @@
 			 xmlns:vm="clr-namespace:ApoFisher.ViewModels"
 			 x:Class="ApoFisher.Views.TraverseView"
              x:DataType="vm:TraverseViewModel"
-             Content="{Binding Map}"
 			 >
-    <!-- <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15"> -->
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
         <!-- <TextBlock Text="Hello Amir this is Traverse!" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
         <!-- <Canvas Name="Map"> -->
         <!-- </Canvas> -->
-        <!-- <Button HorizontalAlignment="Center" Command="{Binding RouteVillage}">BACK</Button> -->
-    <!-- </StackPanel> -->
+        <ContentPage Content="{Binding Map}"/>
+        <Button HorizontalAlignment="Center" Command="{Binding RouteVillage}">BACK</Button>
+    </StackPanel>
 </UserControl>

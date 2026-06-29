@@ -31,7 +31,7 @@ public partial class MainViewModel : ViewModelBase
         _self = this;
         // CurrentLocation = new VillageViewModel(); // That's the main location.
         // for testing we will set it to TraverseViewModel();
-        CurrentLocation = new TraverseViewModel();
+        CurrentLocation = new VillageViewModel();
     }
 
     public static void RouteLocation(string locationName)
