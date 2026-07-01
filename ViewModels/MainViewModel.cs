@@ -2,6 +2,7 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using ApoFisher.DataBases;
 using ApoFisher.DataStructures;
+using System.Diagnostics;
 
 namespace ApoFisher.ViewModels;
 
@@ -26,11 +27,12 @@ public partial class MainViewModel : ViewModelBase
     private ViewModelBase? _currentLocation;
     public ViewModelBase? CurrentLocation { get => _currentLocation; set => SetProperty(ref _currentLocation, value); }
 
+    private bool _statusVisibility;
+    public bool StatusVisibility { get => _statusVisibility; set => SetProperty(ref _statusVisibility, value); }
+
     public MainViewModel()
     {
         _self = this;
-        // CurrentLocation = new VillageViewModel(); // That's the main location.
-        // for testing we will set it to TraverseViewModel();
         CurrentLocation = new VillageViewModel();
     }
 
@@ -44,8 +46,20 @@ public partial class MainViewModel : ViewModelBase
             case "Village":
                 _self?.RouteVillage();
                 break;
+            case "Lake 1":
+                Debug.WriteLine("Going to Lake 1...");
+                break;
+            case "Lake 2":
+                Debug.WriteLine("Going to Lake 2...");
+                break;
+            case "Lake 3":
+                Debug.WriteLine("Going to Lake 3...");
+                break;
+            case "Lake 4":
+                Debug.WriteLine("Going to Lake 4...");
+                break;
             default:
-                throw new System.Exception("[MainViewModel] Invalid Route() argument => "+locationName);
+                throw new System.Exception("[MainViewModel](RouteLocation) -> Invalid argument => "+locationName);
         }
     }
 
@@ -63,11 +77,10 @@ public partial class MainViewModel : ViewModelBase
                 _self?.RouteSettings();
                 break;
             default:
-                throw new System.Exception("[MainViewModel] Invalid Route() argument!");
+                throw new System.Exception("[MainViewModel](Route) -> Invalid argument!");
         }
     }
 
-    // [RelayCommand] public void RouteMap() => CurrentViewModel = new MapViewModel();
     [RelayCommand] public void RouteInventory()
     { 
         if(CurrentViewModel is InventoryViewModel) { CurrentViewModel = null; return; }
@@ -81,4 +94,6 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand] public void RouteSettings() => CurrentViewModel = new SettingsViewModel();
     [RelayCommand] public void RouteTraverse() => CurrentLocation = new TraverseViewModel();
     [RelayCommand] public void RouteVillage() => CurrentLocation = new VillageViewModel();
+
+    [RelayCommand] public void SwitchStatusVisibility() => StatusVisibility = !StatusVisibility;
 }
