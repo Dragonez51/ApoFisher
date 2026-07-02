@@ -32,6 +32,7 @@
 				</Border>
 				<ctrl:RoutingButton RoutingName="Inventory"/>
 				<ctrl:RoutingButton RoutingName="Glossary"/>
+				<ctrl:RoutingButton RoutingName="Settings"/>
 			</StackPanel>	
 			<!-- This Grid below is the UI Horizontal -->
 			<Grid Grid.Column="1" RowDefinitions="75, *">
@@ -49,5 +50,8 @@
 				<UserControl Margin="50" Grid.Row="1" Content="{Binding CurrentViewModel}"></UserControl>
 			</Grid>
 		</Grid>
+	<UserControl IsVisible="{Binding SettingsVisible}">
+		<vm:SettingsViewModel/>
+	</UserControl>
 	</Panel>
 </Window>

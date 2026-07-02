@@ -26,6 +26,8 @@ public partial class MainViewModel : ViewModelBase
     public ViewModelBase? CurrentViewModel { get => _currentViewModel; set => SetProperty(ref _currentViewModel, value); }
     private ViewModelBase? _currentLocation;
     public ViewModelBase? CurrentLocation { get => _currentLocation; set => SetProperty(ref _currentLocation, value); }
+    private bool? _settingsVisible = false;
+    public bool? SettingsVisible { get => _settingsVisible; set => SetProperty(ref _settingsVisible, value); }
 
     private bool _statusVisibility;
     public bool StatusVisibility { get => _statusVisibility; set => SetProperty(ref _statusVisibility, value); }
@@ -91,9 +93,10 @@ public partial class MainViewModel : ViewModelBase
         if(CurrentViewModel is GlossaryViewModel) { CurrentViewModel = null; return; }
         CurrentViewModel = new GlossaryViewModel();    
     }
-    [RelayCommand] public void RouteSettings() => CurrentViewModel = new SettingsViewModel();
+    [RelayCommand] public void RouteSettings() => SwitchSettingsVisibility();
     [RelayCommand] public void RouteTraverse() => CurrentLocation = new TraverseViewModel();
     [RelayCommand] public void RouteVillage() => CurrentLocation = new VillageViewModel();
 
     [RelayCommand] public void SwitchStatusVisibility() => StatusVisibility = !StatusVisibility;
+    [RelayCommand] public void SwitchSettingsVisibility() => SettingsVisible = !SettingsVisible;
 }
