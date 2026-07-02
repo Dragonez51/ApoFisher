@@ -49,10 +49,12 @@ public partial class MainViewModel : ViewModelBase
                 _self?.RouteVillage();
                 break;
             case "Lake 1":
-                Debug.WriteLine("Going to Lake 1...");
+                // Debug.WriteLine("Going to Lake 1...");
+                _self?.RouteLake(1);
                 break;
             case "Lake 2":
-                Debug.WriteLine("Going to Lake 2...");
+                // Debug.WriteLine("Going to Lake 2...");
+                _self?.RouteLake(2);
                 break;
             case "Lake 3":
                 Debug.WriteLine("Going to Lake 3...");
@@ -96,6 +98,8 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand] public void RouteSettings() => SwitchSettingsVisibility();
     [RelayCommand] public void RouteTraverse() => CurrentLocation = new TraverseViewModel();
     [RelayCommand] public void RouteVillage() => CurrentLocation = new VillageViewModel();
+
+    [RelayCommand] private void RouteLake(int lvl) => CurrentLocation = new LakeViewModel(lvl);
 
     [RelayCommand] public void SwitchStatusVisibility() => StatusVisibility = !StatusVisibility;
     [RelayCommand] public void SwitchSettingsVisibility() => SettingsVisible = !SettingsVisible;
