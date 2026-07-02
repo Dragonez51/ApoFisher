@@ -13,8 +13,8 @@ public class ImgDB
         {   "SkillsLogo"            ,       GetIcon(7,4)                                        },
         {   "InventoryLogo"         ,       GetIcon(9, 8)                                       },
         {   "GlossaryLogo"          ,       GetIcon(8,13)                                       },
-        {   "MapLogo"               ,       GetIcon(12, 13)                                     },
-        //               Weapons    
+        {   "TraverseLogo"          ,       GetIcon(12, 13)                                     },
+        //           Weapons / Tools    
         {   "Wooden Sword"          ,       GetIcon(0, 5)                                       },
         {   "Iron Sword"            ,       GetIcon(1, 5)                                       },
         {   "Obsidian Sword"        ,       GetIcon(2, 5)                                       },
@@ -24,6 +24,8 @@ public class ImgDB
         {   "Bow"                   ,       GetIcon(3, 6)                                       },
         {   "Crossbow"              ,       GetIcon(4, 6)                                       },
         {   "Slingshot"             ,       GetIcon(5, 6)                                       },
+        {   "Knife"                 ,       BitmapHelper.Load("Images/FishermansKnife.png")     },
+        {   "Fishing Rod"           ,       BitmapHelper.Load("Images/FishingRod0.png")         },
         //                Armor
         {   "Helmet"                ,       BitmapHelper.Load("Images/Helmet.png")              },
         {   "Chestplate"            ,       BitmapHelper.Load("Images/Chestplate.png")          },

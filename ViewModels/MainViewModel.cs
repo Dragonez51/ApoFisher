@@ -2,7 +2,6 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using ApoFisher.DataBases;
 using ApoFisher.DataStructures;
-using System.Diagnostics;
 
 namespace ApoFisher.ViewModels;
 
@@ -49,21 +48,19 @@ public partial class MainViewModel : ViewModelBase
                 _self?.RouteVillage();
                 break;
             case "Lake 1":
-                // Debug.WriteLine("Going to Lake 1...");
                 _self?.RouteLake(1);
                 break;
             case "Lake 2":
-                // Debug.WriteLine("Going to Lake 2...");
                 _self?.RouteLake(2);
                 break;
             case "Lake 3":
-                Debug.WriteLine("Going to Lake 3...");
+                _self?.RouteLake(3);
                 break;
             case "Lake 4":
-                Debug.WriteLine("Going to Lake 4...");
+                _self?.RouteLake(4);
                 break;
             default:
-                throw new System.Exception("[MainViewModel](RouteLocation) -> Invalid argument => "+locationName);
+                throw new System.Exception("[MainViewModel](Route)(RouteLocation) -> Invalid argument => "+locationName);
         }
     }
 
@@ -81,7 +78,10 @@ public partial class MainViewModel : ViewModelBase
                 _self?.RouteSettings();
                 break;
             default:
-                throw new System.Exception("[MainViewModel](Route) -> Invalid argument!");
+            // This is done so that I can re-use control:RoutingButton
+            // for both in-game locations and UI components.
+                RouteLocation(pageName);
+                break;
         }
     }
 
