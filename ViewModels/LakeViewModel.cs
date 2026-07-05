@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using ApoFisher.DataBases;
+using ApoFisher.Helpers;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 
@@ -13,11 +15,14 @@ public partial class LakeViewModel : ViewModelBase
     public int BouncerHeight { get => ViewportHeight; }
     public int CursorWidth { get => 25; }
     public int CursorHeight { get => ViewportHeight; }
+    public int ProgressMax { get => 100; }
 
     private int _bouncerOffset = 0;
     public int BouncerOffset { get => _bouncerOffset; set => SetProperty(ref _bouncerOffset, value); }
     private int _cursorOffset = 0;
     public int CursorOffset { get => _cursorOffset; set => SetProperty(ref _cursorOffset, value); }
+    private int _progress = 0;
+    public int Progress { get => _progress; set => SetProperty(ref _progress, value); }
 
     private int _lakeLvl;
 
@@ -29,12 +34,15 @@ public partial class LakeViewModel : ViewModelBase
         Debug.WriteLine("[LakeViewModel] Entered Lake "+lvl);
         _lakeLvl = lvl;
 
+        CursorOffset = (ViewportWidth / 2) - (CursorWidth / 2);
+
         _timer = new DispatcherTimer
         {
             Interval = _framerate
         };
 
         SetupAnimation();
+        SetupRandomizer();
     }
 
     private void SetupAnimation()
@@ -42,8 +50,14 @@ public partial class LakeViewModel : ViewModelBase
         bool goBack = false;
         _timer.Tick += (sender, e) =>
         {
+            #region Movement
+            
+            // get an iterator
+            // after 5 ish ticks
+            // strengthen the backing str
+            // up to like 5 lvls.
             CursorOffset-=_lakeLvl;
-            if(CursorOffset < 0 ) CursorOffset = 0;
+            if(CursorOffset < 0) CursorOffset = 0;
 
             if (goBack)
             {
@@ -52,15 +66,62 @@ public partial class LakeViewModel : ViewModelBase
                     goBack = false;
                 }
                 BouncerOffset--;
-                return;
+            }
+            else
+            {
+                if(BouncerOffset >= ViewportWidth - BouncerWidth)
+                {
+                    goBack = true;
+                }
+                BouncerOffset++;
             }
 
-            if(BouncerOffset >= ViewportWidth - BouncerWidth)
+            #endregion
+
+            #region Points
+
+            // if cursor rectangle is within green rectangle
+            if((CursorOffset >= BouncerOffset) && 
+            (CursorOffset + CursorWidth) <= (BouncerOffset + BouncerWidth))
             {
-                goBack = true;
+                if(Progress < ProgressMax) Progress++;
             }
-            BouncerOffset++;
+            else
+            {
+                if(Progress > 0) Progress--;
+            }
+
+            if(Progress >= ProgressMax)
+            {
+                Win();
+            }
+
+            #endregion
         };
+    }
+
+    private void Win()
+    {
+        _timer.Stop();
+        // Debug.WriteLine("You caught a fihh!");
+        try
+        {
+            // DropRandomizer<FishData>.Draw();
+            Debug.WriteLine("You Caught a "+DropRandomizer<FishData>.Draw());
+        }catch(Exception ex)
+        {
+            Debug.WriteLine("You caught rubbish...");
+        }
+    }
+
+    private void SetupRandomizer()
+    {
+        DropRandomizer<FishData>.Reset();
+        foreach(var fish in ItemsDB.Fishes)
+        {
+            DropRandomizer<FishData>.AddElement(fish, fish.chance);
+        }
+        DropRandomizer<FishData>.SetRanges();
     }
 
     [RelayCommand] public void StartFishing() => _timer.Start();
