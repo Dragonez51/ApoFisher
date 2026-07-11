@@ -9,10 +9,10 @@
         x:CompileBindings="True"
 		x:DataType="vm:MainViewModel"
 		Title="ApoFisher"
-		Width="300"
+		Width="800"
 		Height="600"
+		MinWidth="800"
 		MinHeight="600"
-		MinWidth="1200"
 		WindowStartupLocation="CenterOwner"
 		>
 	<Window.DataContext>
@@ -20,29 +20,26 @@
 	</Window.DataContext>
 	
 	<Panel>
-		<TextBlock TextWrapping="Wrap" Text="{Binding Bgtext}"/>
-		<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-			<!--These will be traversal buttons that change the background.-->	
-			<Border BorderBrush="AliceBlue" BorderThickness="2" Margin="15"><Button Content="LAKE" HorizontalAlignment="Stretch"/></Border> 
-			<Border BorderBrush="AliceBlue" BorderThickness="2" Margin="15"><Button Content="BRIEFING" HorizontalAlignment="Center"/></Border>	
-			<Border BorderBrush="AliceBlue" BorderThickness="2" Margin="15"><Button Content="MARKET" HorizontalAlignment="Center"/></Border>	
-		</StackPanel>	
+		<!-- This UserControl is Background (ex. Village -> Traverse -> Lake). -->
+		<UserControl Content="{Binding CurrentLocation}"></UserControl>
+		<!-- This Grid below is UI Vertical -->
 		<Grid ColumnDefinitions="75, *">
 			<StackPanel Grid.Column="0" Orientation="Vertical" Background="#c0002a20">
-				<Border BorderBrush="Red" BorderThickness="3" CornerRadius="8" HorizontalAlignment="Center" Width="55" Height="55" Margin="0,15,0,0">
-					<Button Background="#8aff0000">
+				<Border BorderBrush="Red" Background="#8aff0000" BorderThickness="3" CornerRadius="8" HorizontalAlignment="Center" Width="55" Height="55" Margin="0,15,0,0">
+					<Button Command="{Binding SwitchStatusVisibility}">
 						<Image Source="{Binding MenuLogo}" Width="64" Height="64"/>
 					</Button>
 				</Border>
 				<ctrl:RoutingButton RoutingName="Inventory"/>
 				<ctrl:RoutingButton RoutingName="Glossary"/>
 			</StackPanel>	
+			<!-- This Grid below is the UI Horizontal -->
 			<Grid Grid.Column="1" RowDefinitions="75, *">
-				<StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft" Background="#c0002a20">
+				<StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft" Background="#c0002a20" IsVisible="{Binding StatusVisibility}">
 					<!-- from right => 
 				 	Money
 				 	Hp?
-				 	Radiation?  -->
+				 	Radiation  -->
 					<!-- <Border BorderBrush="AliceBlue" BorderThickness="2" Margin="15"><Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="date"/></Border> -->
 					<Border BorderBrush="AliceBlue" BorderThickness="2" Margin="15"><Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="MONEY"/></Border>
 					<Border BorderBrush="AliceBlue" BorderThickness="2" Margin="15"><ProgressBar Foreground="Red" Value="{Binding HP}" Maximum="{Binding MaxHP}" ShowProgressText="True" ProgressTextFormat="{}{0}/{3}"/></Border>

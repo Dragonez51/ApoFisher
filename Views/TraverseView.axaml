@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"		
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="clr-namespace:ApoFisher.ViewModels"
+			 x:Class="ApoFisher.Views.TraverseView"
+             x:DataType="vm:TraverseViewModel"
+			 >
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
+        <!-- <TextBlock Text="Hello Amir this is Traverse!" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
+        <!-- <Canvas Name="Map"> -->
+        <!-- </Canvas> -->
+        <ContentPage Content="{Binding Viewport}"/>
+        <Button HorizontalAlignment="Center" Command="{Binding RouteVillage}">BACK</Button>
+    </StackPanel>
+</UserControl>
