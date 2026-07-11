@@ -11,20 +11,21 @@ public partial class LakeViewModel : ViewModelBase
 {
     public int ViewportWidth { get => 300; }
     public int ViewportHeight { get => 80; }
-    public int BouncerWidth { get => ViewportWidth/2; }
+    public int BouncerWidth { get => 100 / _lakeLvl; }
     public int BouncerHeight { get => ViewportHeight; }
-    public int CursorWidth { get => 25; }
+    public int CursorWidth { get => 10; }
     public int CursorHeight { get => ViewportHeight; }
-    public int ProgressMax { get => 100; }
+    public int ProgressMax { get; set; }
 
     private int _bouncerOffset = 0;
     public int BouncerOffset { get => _bouncerOffset; set => SetProperty(ref _bouncerOffset, value); }
-    private int _cursorOffset = 0;
-    public int CursorOffset { get => _cursorOffset; set => SetProperty(ref _cursorOffset, value); }
+    private double _cursorOffset = 0;
+    public double CursorOffset { get => _cursorOffset; set => SetProperty(ref _cursorOffset, value); }
     private int _progress = 0;
     public int Progress { get => _progress; set => SetProperty(ref _progress, value); }
 
     private int _lakeLvl;
+    private double _iterator = 0;
 
     private TimeSpan _framerate = TimeSpan.FromSeconds(1 / 60.0);
     private DispatcherTimer _timer;
@@ -34,15 +35,22 @@ public partial class LakeViewModel : ViewModelBase
         Debug.WriteLine("[LakeViewModel] Entered Lake "+lvl);
         _lakeLvl = lvl;
 
-        CursorOffset = (ViewportWidth / 2) - (CursorWidth / 2);
-
         _timer = new DispatcherTimer
         {
             Interval = _framerate
         };
 
+        ProgressMax = 100*_lakeLvl;
+
         SetupAnimation();
         SetupRandomizer();
+        ResetFishing();
+    }
+
+    private void ResetFishing()
+    {
+        CursorOffset = (ViewportWidth / 2) - (CursorWidth / 2);
+        BouncerOffset = 0;
     }
 
     private void SetupAnimation()
@@ -50,13 +58,11 @@ public partial class LakeViewModel : ViewModelBase
         bool goBack = false;
         _timer.Tick += (sender, e) =>
         {
+            if(_iterator < 2) _iterator+=0.05;
+
             #region Movement
-            
-            // get an iterator
-            // after 5 ish ticks
-            // strengthen the backing str
-            // up to like 5 lvls.
-            CursorOffset-=_lakeLvl;
+
+            CursorOffset-=_iterator*_lakeLvl;
             if(CursorOffset < 0) CursorOffset = 0;
 
             if (goBack)
@@ -103,12 +109,10 @@ public partial class LakeViewModel : ViewModelBase
     private void Win()
     {
         _timer.Stop();
-        // Debug.WriteLine("You caught a fihh!");
         try
         {
-            // DropRandomizer<FishData>.Draw();
             Debug.WriteLine("You Caught a "+DropRandomizer<FishData>.Draw());
-        }catch(Exception ex)
+        }catch(Exception)
         {
             Debug.WriteLine("You caught rubbish...");
         }
@@ -124,15 +128,22 @@ public partial class LakeViewModel : ViewModelBase
         DropRandomizer<FishData>.SetRanges();
     }
 
-    [RelayCommand] public void StartFishing() => _timer.Start();
+    [RelayCommand] public void StartFishing() 
+    { 
+        _timer.Start(); 
+        Progress = 0; 
+        ResetFishing(); 
+    }
+
     [RelayCommand] public void BounceFish()
     {
-        var hitStrength = CursorWidth;
+        _iterator = 0;
+        var hitStrength = 12;
         if(CursorOffset + hitStrength > (ViewportWidth - CursorWidth))
         {
             CursorOffset = (ViewportWidth - CursorWidth);
             return;
         }
-        CursorOffset+=CursorWidth;
+        CursorOffset+=hitStrength;
     }
 }

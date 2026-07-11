@@ -1,10 +1,5 @@
 public record FishData(string id, string location, double minSize, double maxSize, double chance)
 {
-    // public string id { get; set; } = "unknown";
-    // public string location { get; set; } = "unknown";
-    // public double minSize { get; set; }
-    // public double maxSize { get; set; }
-    // public double chance { get; set; }
     private string rarity { get; set; } = "unknown";
 
     public void SetRarity()
@@ -14,6 +9,7 @@ public record FishData(string id, string location, double minSize, double maxSiz
         else if(chance > 15) rarity = "rare";
         else if(chance > 5) rarity = "epic";
         else if(chance > 0.5) rarity = "legendary";
+        else if(chance > 0) rarity = "mythical";
     }
 
     public override string ToString()
