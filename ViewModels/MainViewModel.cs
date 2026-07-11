@@ -10,15 +10,13 @@ public partial class MainViewModel : ViewModelBase
     private static MainViewModel? _self;
     public static Player Player = new Player(40);
 
+    // Later on, move it to a different
+    // view not to trash this view.
     public int HP { get => Player.GetHP(); }
     public int MaxHP { get => Player.GetMaxHP(); }
     public int Stamina { get => Player.GetStamina(); }
     public int MaxStamina { get => Player.GetMaxStamina(); }
 
-    public Bitmap AppLogo { get => ImgDB.Get("Logo"); }
-    public Bitmap MapLogo { get => ImgDB.Get("MapLogo"); }
-    public Bitmap InventoryLogo { get => ImgDB.Get("InventoryLogo"); }
-    public Bitmap GlossaryLogo { get => ImgDB.Get("GlossaryLogo"); }
     public Bitmap MenuLogo { get => ImgDB.Get("Menu"); }
 
     private ViewModelBase? _currentViewModel;

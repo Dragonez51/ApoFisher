@@ -1,8 +1,8 @@
 [
-    {  "id":"Bob",       "location":"Lake 1",   "minSize":10.0,   "maxSize":27.0,   "chance":40    },
-    {  "id":"Gary",      "location":"Lake 1",   "minSize":8.0,    "maxSize":15.0,   "chance":20    },
-    {  "id":"Bulbo",     "location":"Lake 1",   "minSize":8.0,    "maxSize":18.0,   "chance":10    },
-    {  "id":"Trapgea",   "location":"Lake 1",   "minSize":4.0,    "maxSize":12.0,   "chance":6     },
-    {  "id":"Seeker",    "location":"Lake 1",   "minSize":12.0,   "maxSize":30.0,   "chance":2.5   },
-    {  "id":"Jelly Fish",    "location":"Lake 1",   "minSize":10.0,   "maxSize":45.0,   "chance":1     }
+    {  "id":"Bob",          "location":"Lake 1",   "minSize":10.0,   "maxSize":27.0,   "chance":40,   "slots":[true, true, true]     },
+    {  "id":"Gary",         "location":"Lake 1",   "minSize":8.0,    "maxSize":15.0,   "chance":20,   "slots":[true, true, true]     },
+    {  "id":"Bulbo",        "location":"Lake 1",   "minSize":8.0,    "maxSize":18.0,   "chance":10,   "slots":[true, true, false]    },
+    {  "id":"Trapgea",      "location":"Lake 1",   "minSize":4.0,    "maxSize":12.0,   "chance":6,    "slots":[true, true, false]    },
+    {  "id":"Seeker",       "location":"Lake 1",   "minSize":12.0,   "maxSize":30.0,   "chance":2.5,  "slots":[true, true, false]    },
+    {  "id":"Jelly Fish",   "location":"Lake 1",   "minSize":10.0,   "maxSize":45.0,   "chance":1,    "slots":[true, true, false]    }
 ]

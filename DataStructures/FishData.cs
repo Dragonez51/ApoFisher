@@ -1,4 +1,4 @@
-public record FishData(string id, string location, double minSize, double maxSize, double chance)
+public record FishData(string id, string location, double minSize, double maxSize, double chance, bool[] slots)
 {
     private string rarity { get; set; } = "unknown";
 
