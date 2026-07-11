@@ -1,7 +1,12 @@
 <UserControl xmlns="https://github.com/avaloniaui"		
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:vm="clr-namespace:ApoFisher.ViewModels"
+			 xmlns:ctrl="clr-namespace:ApoFisher.Controls"
 			 x:Class="ApoFisher.Views.SettingsView"
+			 Background="#990099"
 			 >
-	<TextBlock Text="Hello Amir this is Settings!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<StackPanel Orientation="Vertical" Spacing="15">
+		<TextBlock Text="Hello Amir this is Settings!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		<ctrl:RoutingButton RoutingName="Settings"/>
+	</StackPanel>
 </UserControl>

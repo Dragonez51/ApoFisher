@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using ApoFisher.DataBases;
+using Avalonia;
 using System;
 
 namespace ApoFisher;
@@ -11,6 +12,12 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        #region Database Initialization
+        
+        ItemsDB.Load();
+        
+        #endregion
+        
         try
         {
             BuildAvaloniaApp()
@@ -20,7 +27,6 @@ class Program
             Console.WriteLine(ex);
             Console.ReadLine();
         }
-    
     } 
         
 

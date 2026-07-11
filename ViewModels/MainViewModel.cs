@@ -2,7 +2,6 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using ApoFisher.DataBases;
 using ApoFisher.DataStructures;
-using System.Diagnostics;
 
 namespace ApoFisher.ViewModels;
 
@@ -26,6 +25,8 @@ public partial class MainViewModel : ViewModelBase
     public ViewModelBase? CurrentViewModel { get => _currentViewModel; set => SetProperty(ref _currentViewModel, value); }
     private ViewModelBase? _currentLocation;
     public ViewModelBase? CurrentLocation { get => _currentLocation; set => SetProperty(ref _currentLocation, value); }
+    private bool? _settingsVisible = false;
+    public bool? SettingsVisible { get => _settingsVisible; set => SetProperty(ref _settingsVisible, value); }
 
     private bool _statusVisibility;
     public bool StatusVisibility { get => _statusVisibility; set => SetProperty(ref _statusVisibility, value); }
@@ -47,19 +48,19 @@ public partial class MainViewModel : ViewModelBase
                 _self?.RouteVillage();
                 break;
             case "Lake 1":
-                Debug.WriteLine("Going to Lake 1...");
+                _self?.RouteLake(1);
                 break;
             case "Lake 2":
-                Debug.WriteLine("Going to Lake 2...");
+                _self?.RouteLake(2);
                 break;
             case "Lake 3":
-                Debug.WriteLine("Going to Lake 3...");
+                _self?.RouteLake(3);
                 break;
             case "Lake 4":
-                Debug.WriteLine("Going to Lake 4...");
+                _self?.RouteLake(4);
                 break;
             default:
-                throw new System.Exception("[MainViewModel](RouteLocation) -> Invalid argument => "+locationName);
+                throw new System.Exception("[MainViewModel](Route)(RouteLocation) -> Invalid argument => "+locationName);
         }
     }
 
@@ -77,7 +78,10 @@ public partial class MainViewModel : ViewModelBase
                 _self?.RouteSettings();
                 break;
             default:
-                throw new System.Exception("[MainViewModel](Route) -> Invalid argument!");
+            // This is done so that I can re-use control:RoutingButton
+            // for both in-game locations and UI components.
+                RouteLocation(pageName);
+                break;
         }
     }
 
@@ -91,9 +95,12 @@ public partial class MainViewModel : ViewModelBase
         if(CurrentViewModel is GlossaryViewModel) { CurrentViewModel = null; return; }
         CurrentViewModel = new GlossaryViewModel();    
     }
-    [RelayCommand] public void RouteSettings() => CurrentViewModel = new SettingsViewModel();
+    [RelayCommand] public void RouteSettings() => SwitchSettingsVisibility();
     [RelayCommand] public void RouteTraverse() => CurrentLocation = new TraverseViewModel();
     [RelayCommand] public void RouteVillage() => CurrentLocation = new VillageViewModel();
 
+    [RelayCommand] private void RouteLake(int lvl) => CurrentLocation = new LakeViewModel(lvl);
+
     [RelayCommand] public void SwitchStatusVisibility() => StatusVisibility = !StatusVisibility;
+    [RelayCommand] public void SwitchSettingsVisibility() => SettingsVisible = !SettingsVisible;
 }
