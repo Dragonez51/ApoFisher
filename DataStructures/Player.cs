@@ -6,16 +6,18 @@ public class Player
     private int _hp = 0;
     private int _stamina = 0;
 
-    private Statistics statistics;
+    private Statistics statistics = new Statistics();
 
-    public Player() { Inventory = new PlayerInventory(20); initialize(); }
+    public Player() { Inventory = new PlayerInventory(); initialize(); }
     public Player(int inventoryCapacity) { Inventory = new PlayerInventory(inventoryCapacity); initialize(); }
     public Player(int strength, int dexterity, int intelligence, int maxHealth, int maxStamina){ Inventory = new PlayerInventory(); initialize(); }
     public Player(int strength, int dexterity, int intelligence, int maxHealth, int maxStamina, int inventoryCapacity) { Inventory = new PlayerInventory(inventoryCapacity); initialize(); }
 
+    // TODO: Clear the statistics slop.
+    
     private void initialize()
     {
-        statistics = new Statistics();
+        // statistics = new Statistics();
         _hp = 50;
         _stamina = statistics.GetMaxStamina();
     }

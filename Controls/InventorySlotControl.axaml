@@ -23,14 +23,14 @@
 						<Image		Source="{TemplateBinding SlotBackground}"
 									Width="{TemplateBinding SlotBackgroundSize}"	Height="{TemplateBinding SlotBackgroundSize}"
 									/>
-						<Image		Source="{TemplateBinding ItemIcon}"
+						<!-- <Image		Source="{TemplateBinding ItemIcon}"
 									Width="{TemplateBinding ItemIconSize}"			Height="{TemplateBinding ItemIconSize}"
 									Canvas.Top="{TemplateBinding CanvasOffset}"		Canvas.Left="{TemplateBinding CanvasOffset}"
-									/>
-						<TextBlock	Text="{TemplateBinding ItemQuantity}"		
+									/> -->
+						<!-- <TextBlock	Text="{TemplateBinding ItemQuantity}"		
 									IsVisible="{TemplateBinding Visibility}"
 									Canvas.Bottom="{TemplateBinding CanvasOffset}"	Canvas.Right="{TemplateBinding CanvasOffset}"																					
-									/>
+									/> -->
 					</Canvas>
 				</Border>
 			</ControlTemplate>

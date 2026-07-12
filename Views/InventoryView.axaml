@@ -16,21 +16,21 @@
 				<ItemsControl ItemsSource="{Binding InventorySlots}" Background="#0fa" Padding="10" BorderThickness="3" BorderBrush="BlueViolet">
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
-							<WrapPanel ItemsAlignment="Center"
-									ItemWidth="{Binding SlotSize}"
-									ItemHeight="{Binding SlotSize}"
+							<!-- NOTE: Change it to a grid. (??Uniform grid??) -->
+							<!-- <WrapPanel 	ItemsAlignment="Center"
+										ItemWidth="{Binding SlotSize}"
+										ItemHeight="{Binding SlotSize}"
 									>
-							</WrapPanel>
+							</WrapPanel> -->
+							<UniformGrid FlowDirection="LeftToRight" Height="{Binding GridSize}" Width="{Binding GridSize}"/>
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<Border>		
-								<ctrl:InventorySlotControl ItemIcon				="{Binding Icon}" 
-															ItemQuantity		="{Binding Quantity}"
-															SlotID				="{Binding SlotID}"
-															Visibility			="{Binding Visibility}"
-															ItemIconSize		="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).ItemIconSize}"
+								<ctrl:InventorySlotControl  SlotX				="{Binding SlotX}"
+															SlotY				="{Binding SlotY}"
+															Occupied			="{Binding Occupied}"
 															SlotBackground		="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotBackground}"
 															SlotBackgroundSize	="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
 															CanvasOffset		="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).CanvasOffset}"

@@ -1,36 +1,20 @@
-﻿using Avalonia.Media.Imaging;
-using ApoFisher.DataBases;
-
-namespace ApoFisher.DataStructures;
+﻿namespace ApoFisher.DataStructures;
 
 public class PlayerInventorySlot 
 {
-    protected Bitmap? _icon;
-    public Bitmap? Icon { get => _icon; set => _icon = value; }
-    public bool Visibility { get => Quantity != 0; }
+    public bool Occupied { get; private set; }
+    public int SlotX     { get; private set; }
+    public int SlotY     { get; private set; }
 
-    public int ItemID;
-    public int SlotID { get; set; }
-    public int Quantity { get; set; }
-
-    public PlayerInventorySlot(int slotID) 
+    public PlayerInventorySlot(int SlotX, int SlotY) 
     {
-        SlotID = slotID;
-        ItemID = -1;
-        Quantity = 0;
-        setUpIcon();
+        this.SlotX = SlotX;
+        this.SlotY = SlotY;
+        Occupied = false;
     }
 
-    public PlayerInventorySlot(int slotID, int itemID)
+    public void ToggleOcupied()
     {
-        SlotID = slotID;
-        ItemID = itemID;
-        Quantity = itemID;
-        setUpIcon();
-    }
-
-    private void setUpIcon() 
-    {
-        Icon = ItemID < 0 ? null : InventoryItemsDB.GetItemIcon(ItemID);
+        Occupied = !Occupied;
     }
 }
