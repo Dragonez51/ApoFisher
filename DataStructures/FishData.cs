@@ -1,4 +1,6 @@
-public record FishData(string id, string location, double minSize, double maxSize, double chance, bool[] slots)
+using ApoFisher.DataStructures;
+
+public record FishData(string id, string location, double minSize, double maxSize, double chance, ItemShapeData itemShapeData)
 {
     private string rarity { get; set; } = "unknown";
 

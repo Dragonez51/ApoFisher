@@ -65,5 +65,17 @@ public class PlayerInventory
         } 
     }
 
+    public void AddItem(Item item)
+    {
+        ItemShape itemShape = item.GetItemShape();
+        foreach(var itemSlot in itemShape.GetSlots())
+        {
+            foreach(var invSlot in InventorySlots)
+            {
+                if(itemSlot.SlotX == invSlot.SlotX && itemSlot.SlotY == invSlot.SlotY) invSlot.ToggleOcupied();
+            }
+        }
+    }
+
     public int GetSize() => _size;
 }
