@@ -1,5 +1,3 @@
-using ApoFisher.ViewModels;
-
 namespace ApoFisher.DataStructures;
 
 public class Item
@@ -11,9 +9,8 @@ public class Item
     {
         this._name = name;
         _itemShape = new ItemShape(name);
-        MainViewModel.Player.GetInventory().AddItem(this);
     }
 
     public ItemShape GetItemShape() => _itemShape;
-    public string Getname() => _name;
+    public string GetName() => _name;
 }

@@ -15,6 +15,13 @@ public class ImgDB
         {   "GlossaryLogo"          ,       GetIcon(8,13)                                       },
         {   "TraverseLogo"          ,       GetIcon(12, 13)                                     },
         {   "SettingsLogo"          ,       BitmapHelper.Load("Images/Settings.png")            },
+        //                 Fish    
+        {   "Bulbo"                 ,       BitmapHelper.Load("Images/Bulbo.png")               },
+        {   "Bob"                   ,       BitmapHelper.Load("Images/Bob.png")                 },
+        {   "Gary"                  ,       BitmapHelper.Load("Images/Gary.png")                },
+        {   "Jelly Fish"            ,       BitmapHelper.Load("Images/Jelly Fish.png")          },
+        {   "Seeker"                ,       BitmapHelper.Load("Images/Seeker.png")              },
+        {   "Trapgea"               ,       BitmapHelper.Load("Images/Trapgea.png")             },
         //           Weapons / Tools    
         {   "Wooden Sword"          ,       GetIcon(0, 5)                                       },
         {   "Iron Sword"            ,       GetIcon(1, 5)                                       },

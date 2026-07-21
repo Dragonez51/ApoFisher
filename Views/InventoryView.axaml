@@ -6,40 +6,72 @@
 	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 	xmlns:vm="clr-namespace:ApoFisher.ViewModels"
 	xmlns:v="clr-namespace:ApoFisher.Views"
+	xmlns:ds="clr-namespace:ApoFisher.DataStructures"
 	xmlns:ctrl="clr-namespace:ApoFisher.Controls"
 	x:Class="ApoFisher.Views.InventoryView"
 	x:DataType="vm:InventoryViewModel"
 	>
-	<Border PointerPressed="OnPointerPressed">
-		<ScrollViewer Grid.Column="0">
-			<Border>
-				<ItemsControl ItemsSource="{Binding InventorySlots}" Background="#0fa" Padding="10" BorderThickness="3" BorderBrush="BlueViolet">
-					<ItemsControl.ItemsPanel>
-						<ItemsPanelTemplate>
-							<!-- NOTE: Change it to a grid. (??Uniform grid??) -->
-							<!-- <WrapPanel 	ItemsAlignment="Center"
-										ItemWidth="{Binding SlotSize}"
-										ItemHeight="{Binding SlotSize}"
-									>
-							</WrapPanel> -->
-							<UniformGrid FlowDirection="LeftToRight" Height="{Binding GridSize}" Width="{Binding GridSize}"/>
-						</ItemsPanelTemplate>
-					</ItemsControl.ItemsPanel>
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<Border>		
+	<Border Background="#0fa" BorderThickness="3" BorderBrush="BlueViolet">
+		<ScrollViewer>
+			<Panel>
+				<Border PointerPressed="OnPointerPressed" Width="{Binding ContainerSize}" Height="{Binding ContainerSize}">
+					<ItemsControl ItemsSource="{Binding InventorySlots}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<Canvas Width="{Binding CanvasSize}" Height="{Binding CanvasSize}"
+										HorizontalAlignment="Center" VerticalAlignment="Center"
+									/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>		
 								<ctrl:InventorySlotControl  SlotX				="{Binding SlotX}"
 															SlotY				="{Binding SlotY}"
 															Occupied			="{Binding Occupied}"
 															SlotBackground		="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotBackground}"
 															SlotBackgroundSize	="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
-															CanvasOffset		="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).CanvasOffset}"
-														/>
-							</Border>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</Border>
+															Width				="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
+															Height				="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
+								/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+						<ItemsControl.Styles>
+							<Style Selector="ContentPresenter" x:DataType="ds:PlayerInventorySlot">
+								<Setter Property="Canvas.Top" Value="{Binding TopOffset}"/>
+								<Setter Property="Canvas.Left" Value="{Binding LeftOffset}"/>
+							</Style>
+						</ItemsControl.Styles>
+					</ItemsControl>
+				</Border>
+				<!--Inventory Items (Item Icons)-->
+				<!--Main click handler-->
+				<Border PointerPressed="OnPointerPressed" ZIndex="1">
+					<ItemsControl ItemsSource="{Binding InventoryItems}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<Canvas Width="{Binding CanvasSize}" Height="{Binding CanvasSize}"
+										HorizontalAlignment="Center" VerticalAlignment="Center"
+									/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Image 	Source="{Binding Icon}"
+										Width="{Binding IconWidth}"
+										Height="{Binding IconHeight}"
+										ZIndex="1"
+									/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+						<ItemsControl.Styles>
+							<Style Selector="ContentPresenter" x:DataType="ds:PlayerInventoryItem">
+								<Setter Property="Canvas.Left" Value="{Binding IconPositionX}"/>
+								<Setter Property="Canvas.Top" Value="{Binding IconPositionY}"/>
+							</Style>
+						</ItemsControl.Styles>
+					</ItemsControl>
+				</Border>
+			</Panel>
 		</ScrollViewer>
 	</Border>
 </UserControl>

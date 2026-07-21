@@ -1,81 +1,105 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace ApoFisher.DataStructures;
 
 public class PlayerInventory
 {
-    // rn Inventory is a dynamic list of item slots.
-    // We (me) need to change it to a static tab.
-    // Thus I have to change the whole structure of InventoryView.
-    // I don't need to fully change the InventorySlotControl since it works fine for now
-    // I will just have to change it so that those slots point to the ??item id??.
+    private int _defaultSize = 6;
+    public static int Size { get; private set; } // size of inventory (size x size)
+    public static int SlotSize { get => 64; }
+    public static int CanvasOffset { get => 16; }
 
-    private int _size;
-
-    private ObservableCollection<PlayerInventorySlot> InventorySlots;
-    // private PlayerInventorySlot[] InventorySlots;
+    public List<PlayerInventorySlot> InventorySlots { get; private set; } // dynamic list of slots
+    public List<PlayerInventoryItem> InventoryItems { get; private set; } // dynamic list of items
 
     public PlayerInventory() 
     {
-        InventorySlots = new ObservableCollection<PlayerInventorySlot>();
-        // InventorySlots = new PlayerInventorySlot[20];
-        GenerateSlots(5);
-        _size = 5;
+        InventorySlots = new ();
+        InventoryItems = new ();
+        GenerateSlots(_defaultSize);
+        Size = _defaultSize;
     }
 
     public PlayerInventory(int size) 
     {
-        InventorySlots = new ObservableCollection<PlayerInventorySlot>();
-        // InventorySlots = new PlayerInventorySlot[slotsCount];
+        InventorySlots = new ();
+        InventoryItems = new ();
         GenerateSlots(size);
-        _size = size;
-        // AddSlots(slotsCount);
-        // AddTwoItems();
+        Size = size;
     }
-
-    // in this version we don't need this item swapping.
-    public void SwapItems(int FirstID, int SecondID) 
-    {
-        Debug.WriteLine("[PlayerInventory](SwapItems) Swapping items is currently unavailable.");
-        // throw new System.Exception("[PlayerInventory](SwapItems) Swapping items is currently unavailable.");
-    //     PlayerInventorySlot temp        = InventorySlots[FirstID];
-    //     InventorySlots[FirstID]         = InventorySlots[SecondID];
-    //     InventorySlots[SecondID]        = temp;
-    //     InventorySlots[FirstID].SlotID  = FirstID;
-    //     InventorySlots[SecondID].SlotID = SecondID;
-    }
-
-    // in this version we also cannot add two items just like that for now.
-    // private void AddTwoItems() { InventorySlots[0] = new PlayerInventorySlot(0, 1); InventorySlots[1] = new PlayerInventorySlot(1, 6); }
-    // private void AddSlots(int amount) { for (int i = 0; i < amount; i++) { InventorySlots.Add(new PlayerInventorySlot(i)); } }
     
-    public ObservableCollection<PlayerInventorySlot> GetInventorySlots() => InventorySlots;
-    // public PlayerInventorySlot[] GetInventorySlots() => InventorySlots;
-    // private void AddSlots(int amount) { for (int i = 0; i < amount; i++) { InventorySlots[i] = new PlayerInventorySlot(i); } }
+    // Add size x size slots to InventorySlots list.
     private void GenerateSlots(int size) 
     { 
-        for (int x = 0; x < size; x++) 
-        { 
-            for(int y = 0; y < size; y++)
-            {
+        for (int y = 0; y < size; y++)
+            for(int x = 0; x < size; x++)
                 InventorySlots.Add(new PlayerInventorySlot(x, y)); 
-                // Debug.WriteLine("x: "+x+" | y:" + y);
-            }
-        } 
     }
 
+    // Add an item to the InventoryItems
     public void AddItem(Item item)
     {
         ItemShape itemShape = item.GetItemShape();
+
+        // Place dynamically
+        foreach(var invSlot in InventorySlots)
+        {
+            if (!invSlot.Occupied)
+            {
+                //Go through item shape pattern and check if there are no obstructing slots.
+                int startX = invSlot.SlotX;
+                int startY = invSlot.SlotY;
+
+                var itemSlots = itemShape.GetSlots();
+
+                bool pathClear = true;
+                for(int i=1; (i<itemSlots.Count) && pathClear; i++)
+                {
+                    try
+                    {
+                        if(GetSlotAt(startX+itemSlots[i].SlotX, startY + itemSlots[i].SlotY).Occupied)
+                        {
+                            pathClear = false;
+                        } 
+                    }
+                    catch (Exception)
+                    {
+                        pathClear = false;
+                    }
+                }
+                if (pathClear) // Add the item in this path.
+                {
+                    AddItemAt(startX, startY, itemShape);
+                    // Add to items list.
+                    var invItem = new PlayerInventoryItem(item, startX, startY);
+                    // invItem.SetIconPosition(startX, startY);
+                    InventoryItems.Add(invItem);
+                    return;
+                }
+            }
+        }
+
+        // throw new Exception("[PlayerInventory] AddItem() -> could not find space for this item.");
+        Debug.WriteLine("Could not find space for this item!");
+    }
+
+    private void AddItemAt(int x, int y, ItemShape itemShape)
+    {
         foreach(var itemSlot in itemShape.GetSlots())
         {
-            foreach(var invSlot in InventorySlots)
-            {
-                if(itemSlot.SlotX == invSlot.SlotX && itemSlot.SlotY == invSlot.SlotY) invSlot.ToggleOcupied();
-            }
+            var invSlot = GetSlotAt(x + itemSlot.SlotX, y + itemSlot.SlotY);
+            invSlot.ToggleOccupied();
         }
     }
 
-    public int GetSize() => _size;
+    private PlayerInventorySlot GetSlotAt(int x, int y)
+    {
+        foreach(var slot in InventorySlots)
+        {
+            if(slot.SlotX == x && slot.SlotY == y) return slot;
+        }
+        throw new Exception("[PlayerInventory] GetSlotAt() Index out of range!");
+    }
 }

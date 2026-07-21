@@ -1,23 +1,24 @@
 ﻿using Avalonia.Media.Imaging;
 using ApoFisher.DataBases;
-using System.Collections.ObjectModel;
 using ApoFisher.DataStructures;
-using ApoFisher.Views;
 using Avalonia.Controls;
 using Avalonia.Input;
 using ApoFisher.Controls;
 using System.Diagnostics;
+using Avalonia.Controls.Shapes;
+using System.Collections.Generic;
 
 namespace ApoFisher.ViewModels;
 
 public class InventoryViewModel : ViewModelBase
 {
-    public ObservableCollection<PlayerInventorySlot> InventorySlots { get => MainViewModel.Player.GetInventory().GetInventorySlots(); }
+    public List<PlayerInventorySlot> InventorySlots { get => MainViewModel.Player.GetInventory().InventorySlots; }
+    public List<PlayerInventoryItem> InventoryItems { get => MainViewModel.Player.GetInventory().InventoryItems; }
     // public PlayerInventorySlot[] InventorySlots { get => MainViewModel.Player.GetInventory().GetInventorySlots();}
-    public int SlotSize             { get => 96; }
-    // public int ItemIconSize         { get => 64; }
-    public int CanvasOffset         { get => 16; }
-    public int GridSize             { get => SlotSize * MainViewModel.Player.GetInventory().GetSize(); }
+    public int SlotSize             { get => PlayerInventory.SlotSize; }
+    public int CanvasSize           { get => SlotSize * PlayerInventory.Size; }
+    public int ContainerSize        { get => CanvasSize + (PlayerInventory.CanvasOffset*2); }
+    public int CanvasOffset         { get => PlayerInventory.CanvasOffset; }
     public Bitmap SlotBackground    { get => ImgDB.Get("InventorySlot"); }
 
     // private int _selectedSlotID;
@@ -31,17 +32,31 @@ public class InventoryViewModel : ViewModelBase
     {
         //NOTE: Clicking on main canvas sends the same signal....
 
+        Debug.WriteLine("[InventoryViewModel] ClickHandler(sender: "+sender+", PointerPressedEventArgs: "+e+")");
+        Debug.WriteLine("e.Source = "+e.Source);
         // if((e.Source as Border) != null) { Debug.WriteLine("(FROM BORDER) SlotX: "+(((e.Source) as Border)?.Parent as InventorySlotControl)?.SlotX+" | SlotY: "+(((e.Source) as Border)?.Parent as InventorySlotControl)?.SlotY); return; }
         if((e.Source as Image) != null) 
         {
+            // this handler is the previous version.
             var slot = (((e.Source as Image)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl;
-            bool? occupied = slot?.Occupied;
-            if(occupied is null)
+            if(slot is null)
             {
-                Debug.WriteLine("[InventoryViewModel](ClickHandler) occupied is null :D");
-                return;
+                // var slot2 = ((e.Source as Image)?.Parent as Canvas)?.Parent;
+                // Debug.WriteLine(((e.Source as Image)?.Parent as Canvas)?.Parent);
             }
-            Debug.WriteLine("SlotX: "+slot?.SlotX+" | SlotY: "+slot?.SlotY+" | Occupied? "+occupied); 
+            
+            // bool? occupied = slot?.Occupied;
+            // if(occupied is null)
+            // {
+            //     Debug.WriteLine("[InventoryViewModel](ClickHandler) occupied is null :D");
+            //     return;
+            // }
+            // Debug.WriteLine((slot?.DataContext as PlayerInventorySlot)); 
+        }
+        if((e.Source as Rectangle) != null)
+        {
+            var slot = ((((e.Source as Rectangle)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl)?.DataContext as PlayerInventorySlot;
+            Debug.WriteLine(slot);
         }
         
         // Debug.WriteLine("Clicked Item slot, but didn't recoginze source... ("+e.Source+")");

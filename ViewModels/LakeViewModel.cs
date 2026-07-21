@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using ApoFisher.DataBases;
+using ApoFisher.DataStructures;
 using ApoFisher.Helpers;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
@@ -109,12 +110,18 @@ public partial class LakeViewModel : ViewModelBase
     private void Win()
     {
         _timer.Stop();
+        ResetFishing();
+        // MainViewModel.Player.GetInventory().AddItem(new Fish("Seeker", 12.0));
         try
         {
-            Debug.WriteLine("You Caught a "+DropRandomizer<FishData>.Draw());
-        }catch(Exception)
+            var drop = DropRandomizer<FishData>.Draw();
+            Debug.WriteLine("You Caught a "+drop);
+            MainViewModel.Player.GetInventory().AddItem(new Fish(drop.id, drop.minSize));
+        }
+        catch(NullDrawException)
         {
             Debug.WriteLine("You caught rubbish...");
+            return;
         }
     }
 

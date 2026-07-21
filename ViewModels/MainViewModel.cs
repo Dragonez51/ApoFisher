@@ -8,7 +8,7 @@ namespace ApoFisher.ViewModels;
 public partial class MainViewModel : ViewModelBase 
 {
     private static MainViewModel? _self;
-    public static Player Player = new Player(4);
+    public static Player Player = new Player();
 
     // Later on, move it to a different
     // view not to trash this view.

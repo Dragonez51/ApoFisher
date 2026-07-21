@@ -42,6 +42,6 @@ public static class DropRandomizer<T>
                 return drop.Drop;
             }
         }
-        throw new Exception("[DropRandomizer](Draw) drew a null item!");
+        throw new NullDrawException("[DropRandomizer](Draw) drew a null item!");
     }
 }
