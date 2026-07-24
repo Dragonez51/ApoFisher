@@ -26,6 +26,7 @@
 						<Rectangle	Fill="#aa000000"
 									Width="{TemplateBinding SlotBackgroundSize}"	Height="{TemplateBinding SlotBackgroundSize}"
 									IsVisible="{TemplateBinding Occupied}"
+									IsHitTestVisible="False"
 									/>
 					</Canvas>
 				</Border>

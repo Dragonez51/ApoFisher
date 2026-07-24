@@ -45,7 +45,7 @@
 				</Border>
 				<!--Inventory Items (Item Icons)-->
 				<!--Main click handler-->
-				<Border PointerPressed="OnPointerPressed" ZIndex="1">
+				<Border PointerPressed="OnPointerPressed">
 					<ItemsControl ItemsSource="{Binding InventoryItems}">
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
@@ -59,7 +59,7 @@
 								<Image 	Source="{Binding Icon}"
 										Width="{Binding IconWidth}"
 										Height="{Binding IconHeight}"
-										ZIndex="1"
+										IsHitTestVisible="False"
 									/>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>

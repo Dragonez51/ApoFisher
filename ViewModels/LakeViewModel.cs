@@ -111,7 +111,7 @@ public partial class LakeViewModel : ViewModelBase
     {
         _timer.Stop();
         ResetFishing();
-        // MainViewModel.Player.GetInventory().AddItem(new Fish("Seeker", 12.0));
+        // MainViewModel.Player.GetInventory().AddItem(new Fish("Trapgea", 12.0));
         try
         {
             var drop = DropRandomizer<FishData>.Draw();

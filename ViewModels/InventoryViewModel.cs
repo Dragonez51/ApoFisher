@@ -30,35 +30,25 @@ public class InventoryViewModel : ViewModelBase
 
     public void ClickHandler(object sender, PointerPressedEventArgs e)
     {
-        //NOTE: Clicking on main canvas sends the same signal....
-
-        Debug.WriteLine("[InventoryViewModel] ClickHandler(sender: "+sender+", PointerPressedEventArgs: "+e+")");
-        Debug.WriteLine("e.Source = "+e.Source);
-        // if((e.Source as Border) != null) { Debug.WriteLine("(FROM BORDER) SlotX: "+(((e.Source) as Border)?.Parent as InventorySlotControl)?.SlotX+" | SlotY: "+(((e.Source) as Border)?.Parent as InventorySlotControl)?.SlotY); return; }
+        // if we are not holding any item: click an item to hold it.
         if((e.Source as Image) != null) 
         {
-            // this handler is the previous version.
+            // Option 1: Empty slot;
             var slot = (((e.Source as Image)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl;
-            if(slot is null)
-            {
-                // var slot2 = ((e.Source as Image)?.Parent as Canvas)?.Parent;
-                // Debug.WriteLine(((e.Source as Image)?.Parent as Canvas)?.Parent);
+            if(slot != null)
+            { 
+                var slotDs = slot.DataContext as PlayerInventorySlot;
+                Debug.WriteLine("[InventoryViewModel] ClickHandler() clicked on: "+slotDs);
             }
-            
-            // bool? occupied = slot?.Occupied;
-            // if(occupied is null)
-            // {
-            //     Debug.WriteLine("[InventoryViewModel](ClickHandler) occupied is null :D");
-            //     return;
-            // }
-            // Debug.WriteLine((slot?.DataContext as PlayerInventorySlot)); 
-        }
-        if((e.Source as Rectangle) != null)
-        {
-            var slot = ((((e.Source as Rectangle)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl)?.DataContext as PlayerInventorySlot;
-            Debug.WriteLine(slot);
+            else
+            {
+                var item = (e.Source as Image)?.DataContext as PlayerInventoryItem;
+                Debug.WriteLine("[InventoryViewModel] ClickHandler() clicked "+item);
+            }
         }
         
+        // Below is a representation of the previous version.
+
         // Debug.WriteLine("Clicked Item slot, but didn't recoginze source... ("+e.Source+")");
         // int? SlotID = 0;
         // if ((e.Source as Border) != null) SlotID = ((e.Source as Border)?.Parent as InventorySlotControl)?.SlotID;

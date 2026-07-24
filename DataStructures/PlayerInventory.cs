@@ -41,25 +41,33 @@ public class PlayerInventory
     // Add an item to the InventoryItems
     public void AddItem(Item item)
     {
-        ItemShape itemShape = item.GetItemShape();
+        ItemShapeData itemShape = item.GetItemShape();
 
-        // Place dynamically
+        // Go through every slot in inventory
         foreach(var invSlot in InventorySlots)
         {
+            // find an empty slot
             if (!invSlot.Occupied)
             {
-                //Go through item shape pattern and check if there are no obstructing slots.
                 int startX = invSlot.SlotX;
                 int startY = invSlot.SlotY;
 
-                var itemSlots = itemShape.GetSlots();
+                // dynamic list of PlayerInventorySlot that defines the item shape
+                var itemSlots = itemShape.ItemSlots;
 
+                // check value if checked offsets are not obstructed
                 bool pathClear = true;
-                for(int i=1; (i<itemSlots.Count) && pathClear; i++)
+
+                // for every itemSlot (excluding the first one since we know it is not occupied) from item shape, 
+                // check if (startX + item slot X) does not go off boundries (hence catch exception) and is not occupied.
+                // Debug.WriteLine("[startX="+startX+"][startY="+startY+"]");
+                for(int i=0; (i<itemSlots.Count) && pathClear; i++)
                 {
                     try
                     {
-                        if(GetSlotAt(startX+itemSlots[i].SlotX, startY + itemSlots[i].SlotY).Occupied)
+                        var checkSlot = GetSlotAt(startX+itemSlots[i].SlotX, startY + itemSlots[i].SlotY);
+                        // Debug.WriteLine("   [iteration: "+i+"][checkSlot.SlotX="+checkSlot.SlotX+"][checkSlot.SlotY="+checkSlot.SlotY+"]");
+                        if(checkSlot.Occupied)
                         {
                             pathClear = false;
                         } 
@@ -69,15 +77,18 @@ public class PlayerInventory
                         pathClear = false;
                     }
                 }
-                if (pathClear) // Add the item in this path.
+                // if the path is clear, add this item
+                // starting from the previously checked slot
+                if (pathClear)
                 {
+                    // Add to UI:
                     AddItemAt(startX, startY, itemShape);
-                    // Add to items list.
-                    var invItem = new PlayerInventoryItem(item, startX, startY);
-                    // invItem.SetIconPosition(startX, startY);
-                    InventoryItems.Add(invItem);
+
+                    // Add to items list:
+                    InventoryItems.Add(new PlayerInventoryItem(item, startX, startY));
                     return;
                 }
+                // if path is not clear, look for another slot.
             }
         }
 
@@ -85,12 +96,15 @@ public class PlayerInventory
         Debug.WriteLine("Could not find space for this item!");
     }
 
-    private void AddItemAt(int x, int y, ItemShape itemShape)
+    private void AddItemAt(int x, int y, ItemShapeData itemShape)
     {
-        foreach(var itemSlot in itemShape.GetSlots())
+        // Debug.WriteLine("[PlayerInventory] AddItemAt(x:"+x+", y:"+y+", itemShape:"+itemShape+")");
+        int i = 1;
+        foreach(var itemSlot in itemShape.ItemSlots)
         {
-            var invSlot = GetSlotAt(x + itemSlot.SlotX, y + itemSlot.SlotY);
-            invSlot.ToggleOccupied();
+            // Debug.WriteLine("   [iteration:"+i+++"][itemSlot.SlotX:"+itemSlot.SlotX+", itemSlot.SlotY:"+itemSlot.SlotY+"]");
+            var slot = GetSlotAt(x + itemSlot.SlotX, y + itemSlot.SlotY);
+            slot.ToggleOccupied();
         }
     }
 

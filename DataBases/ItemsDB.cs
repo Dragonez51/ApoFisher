@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using ApoFisher.DataStructures;
@@ -18,6 +19,8 @@ public class ItemsDB
         foreach(var fish in Fishes)
         {
             fish.SetRarity();
+            // Debug.WriteLine("["+fish.id+"]");
+            fish.itemShapeData.InitializeItemSlots();
         }
     }
 

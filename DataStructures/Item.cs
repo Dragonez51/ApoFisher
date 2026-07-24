@@ -1,16 +1,22 @@
+using ApoFisher.DataBases;
+
 namespace ApoFisher.DataStructures;
 
 public class Item
 {
     private string _name;
-    private ItemShape _itemShape;
+    private ItemShapeData _itemShape;
 
     public Item(string name)
     {
-        this._name = name;
-        _itemShape = new ItemShape(name);
+        _name = name;
+        _itemShape = ItemsDB.GetItemShape(name);
     }
 
-    public ItemShape GetItemShape() => _itemShape;
+    public ItemShapeData GetItemShape() => _itemShape;
     public string GetName() => _name;
+    public override string ToString()
+    {
+        return "[Item[Name = "+_name+"]]";
+    }
 }

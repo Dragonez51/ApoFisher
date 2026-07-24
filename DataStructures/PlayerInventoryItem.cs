@@ -16,8 +16,8 @@ public class PlayerInventoryItem
     public Bitmap Icon { get => ImgDB.Get(_item.GetName()); }
     public int IconPositionX { get; private set; }
     public int IconPositionY { get; private set; }
-    public int IconWidth { get => _item.GetItemShape().GetWidth() * PlayerInventory.SlotSize; }
-    public int IconHeight { get => _item.GetItemShape().GetHeight() * PlayerInventory.SlotSize; }
+    public int IconWidth { get => _item.GetItemShape().Width * PlayerInventory.SlotSize; }
+    public int IconHeight { get => _item.GetItemShape().Height * PlayerInventory.SlotSize; }
 
     public PlayerInventoryItem(Item item, int rootX, int rootY)
     {
@@ -25,7 +25,9 @@ public class PlayerInventoryItem
         OccupiedSlots = new ();
         RootX = rootX;
         RootY = rootY;
-        SetIconPosition(rootX, rootY);
+
+        // Set icon position with an offset to left if min X of item shape is < 0
+        SetIconPosition(rootX+item.GetItemShape().MinX, rootY);
     }
 
     public void SetIconPosition(int x, int y)
@@ -36,4 +38,9 @@ public class PlayerInventoryItem
 
     public Item GetItem() => _item;
     public List<PlayerInventorySlot> GetOccupiedSlots() => OccupiedSlots;
+
+    public override string ToString()
+    {
+        return "[PlayerInventoryItem[Root=["+RootX+" "+RootY+"]][Item="+_item.ToString()+"]]";
+    }
 }
