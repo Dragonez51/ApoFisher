@@ -1,46 +1,55 @@
-using System.Collections.Generic;
 using ApoFisher.DataBases;
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ApoFisher.DataStructures;
 
-public class PlayerInventoryItem
+public partial class PlayerInventoryItem : ObservableObject
 {
-    // System elements:
-    private List<PlayerInventorySlot> OccupiedSlots;
-    private Item _item;
-    public int RootX { get; private set; }
-    public int RootY { get; private set; }
+    public static int MinID { get; set; } = 0;
 
-    // UI elements:
-    public Bitmap Icon { get => ImgDB.Get(_item.GetName()); }
-    public int IconPositionX { get; private set; }
-    public int IconPositionY { get; private set; }
-    public int IconWidth { get => _item.GetItemShape().Width * PlayerInventory.SlotSize; }
-    public int IconHeight { get => _item.GetItemShape().Height * PlayerInventory.SlotSize; }
+    // Properties:
+    public Item Item    { get; private set; }
+    public int RootX    { get; private set; }
+    public int RootY    { get; private set; }
+    public int ItemID   { get; private set;}
+
+    // UI properties:
+    public Bitmap Icon          { get => ImgDB.Get(Item.GetName()); }
+    [ObservableProperty] private int _iconPositionX;
+    [ObservableProperty] private int _iconPositionY;
+    public int IconWidth        { get => Item.GetItemShape().Width * PlayerInventory.SlotSize; }
+    public int IconHeight       { get => Item.GetItemShape().Height * PlayerInventory.SlotSize; }
 
     public PlayerInventoryItem(Item item, int rootX, int rootY)
     {
-        _item = item;
-        OccupiedSlots = new ();
+        Item = item;
         RootX = rootX;
         RootY = rootY;
 
+        // Just to speed up things, I'll skip this part, but later on I have to change this.
+        ItemID = MinID++;
+
         // Set icon position with an offset to left if min X of item shape is < 0
-        SetIconPosition(rootX+item.GetItemShape().MinX, rootY);
+        SetIconPosition(rootX, rootY);
     }
 
-    public void SetIconPosition(int x, int y)
+    public void MoveItem(int rootX, int rootY)
     {
-        IconPositionX = x * PlayerInventory.SlotSize;
+        RootX = rootX;
+        RootY = rootY;
+
+        SetIconPosition(rootX, rootY);
+    }
+
+    private void SetIconPosition(int x, int y)
+    {
+        IconPositionX = (x+Item.GetItemShape().MinX) * PlayerInventory.SlotSize;
         IconPositionY = y * PlayerInventory.SlotSize;
     }
 
-    public Item GetItem() => _item;
-    public List<PlayerInventorySlot> GetOccupiedSlots() => OccupiedSlots;
-
     public override string ToString()
     {
-        return "[PlayerInventoryItem[Root=["+RootX+" "+RootY+"]][Item="+_item.ToString()+"]]";
+        return "[PlayerInventoryItem[Root=["+RootX+" "+RootY+"]][Item="+Item.ToString()+"]]";
     }
 }

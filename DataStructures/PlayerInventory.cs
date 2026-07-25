@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace ApoFisher.DataStructures;
 
 public class PlayerInventory
 {
+    #region Inventory Properties
+    
     private int _defaultSize = 6;
     public static int Size { get; private set; } // size of inventory (size x size)
     public static int SlotSize { get => 64; }
     public static int CanvasOffset { get => 16; }
 
-    public List<PlayerInventorySlot> InventorySlots { get; private set; } // dynamic list of slots
-    public List<PlayerInventoryItem> InventoryItems { get; private set; } // dynamic list of items
+    #endregion
+
+    public ObservableCollection<PlayerInventorySlot> InventorySlots { get; private set; } // list of inventory slots
+    public ObservableCollection<PlayerInventoryItem> InventoryItems { get; private set; } // list of items in inventory
+
+    #region Initialization
 
     public PlayerInventory() 
     {
@@ -38,10 +45,13 @@ public class PlayerInventory
                 InventorySlots.Add(new PlayerInventorySlot(x, y)); 
     }
 
+    #endregion
+
+    #region Item Addition
+
     // Add an item to the InventoryItems
     public void AddItem(Item item)
     {
-        ItemShapeData itemShape = item.GetItemShape();
 
         // Go through every slot in inventory
         foreach(var invSlot in InventorySlots)
@@ -52,63 +62,136 @@ public class PlayerInventory
                 int startX = invSlot.SlotX;
                 int startY = invSlot.SlotY;
 
-                // dynamic list of PlayerInventorySlot that defines the item shape
-                var itemSlots = itemShape.ItemSlots;
-
-                // check value if checked offsets are not obstructed
-                bool pathClear = true;
-
-                // for every itemSlot (excluding the first one since we know it is not occupied) from item shape, 
-                // check if (startX + item slot X) does not go off boundries (hence catch exception) and is not occupied.
-                // Debug.WriteLine("[startX="+startX+"][startY="+startY+"]");
-                for(int i=0; (i<itemSlots.Count) && pathClear; i++)
-                {
-                    try
-                    {
-                        var checkSlot = GetSlotAt(startX+itemSlots[i].SlotX, startY + itemSlots[i].SlotY);
-                        // Debug.WriteLine("   [iteration: "+i+"][checkSlot.SlotX="+checkSlot.SlotX+"][checkSlot.SlotY="+checkSlot.SlotY+"]");
-                        if(checkSlot.Occupied)
-                        {
-                            pathClear = false;
-                        } 
-                    }
-                    catch (Exception)
-                    {
-                        pathClear = false;
-                    }
-                }
                 // if the path is clear, add this item
-                // starting from the previously checked slot
-                if (pathClear)
+                // starting from the currently checked slot
+                if (CheckItemShape(item.GetItemShape().ItemSlots, startX, startY))
                 {
-                    // Add to UI:
-                    AddItemAt(startX, startY, itemShape);
-
-                    // Add to items list:
-                    InventoryItems.Add(new PlayerInventoryItem(item, startX, startY));
+                    AddItemAt(item, startX, startY);
                     return;
                 }
                 // if path is not clear, look for another slot.
             }
         }
 
-        // throw new Exception("[PlayerInventory] AddItem() -> could not find space for this item.");
+        // NOTE: Come up with a solution for an item adder blockage.
         Debug.WriteLine("Could not find space for this item!");
     }
 
-    private void AddItemAt(int x, int y, ItemShapeData itemShape)
+    private void AddItemAt(Item item, int x, int y)
     {
-        // Debug.WriteLine("[PlayerInventory] AddItemAt(x:"+x+", y:"+y+", itemShape:"+itemShape+")");
-        int i = 1;
-        foreach(var itemSlot in itemShape.ItemSlots)
+        // Add to list:
+        var newItem = new PlayerInventoryItem(item, x, y);
+        InventoryItems.Add(newItem);
+
+        FlushItemSlots(newItem, x, y);       
+    }
+
+    #endregion
+
+    #region Item Deletion
+
+    public void DeleteItem(int itemID)
+    {
+        DeleteItemUI(itemID);
+        DeleteItemStructure(itemID);
+    }
+
+    private void DeleteItemUI(int itemID)
+    {
+        foreach(var invSlot in InventorySlots)
         {
-            // Debug.WriteLine("   [iteration:"+i+++"][itemSlot.SlotX:"+itemSlot.SlotX+", itemSlot.SlotY:"+itemSlot.SlotY+"]");
-            var slot = GetSlotAt(x + itemSlot.SlotX, y + itemSlot.SlotY);
+            if (invSlot.Occupied && invSlot.ItemID == itemID)
+            {
+                invSlot.SetItemID(-1);
+                invSlot.ToggleOccupied();
+            }
+        }
+    }
+
+    private void DeleteItemStructure(int itemID)
+    {
+        foreach(var item in InventoryItems)
+        {
+            if(item.ItemID == itemID)
+            {
+                InventoryItems.Remove(item);
+                break;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Item Movement
+
+    public void MoveItem(int itemID, int x, int y)
+    {
+        var listItem = GetItem(itemID);
+        if(CheckItemShape(listItem.Item.GetItemShape().ItemSlots, itemID, x, y))
+        {
+            DeleteItemUI(itemID);
+            listItem.MoveItem(x, y);
+            FlushItemSlots(listItem, x, y);
+        }
+    }
+
+    #endregion
+
+    #region Update functions
+
+    private void FlushItemSlots(PlayerInventoryItem listItem, int x, int y)
+    {
+        foreach(var itemSlot in listItem.Item.GetItemShape().ItemSlots)
+        {
+            var slot = GetSlot(x + itemSlot.SlotX, y + itemSlot.SlotY);
+            slot.SetItemID(listItem.ItemID);
             slot.ToggleOccupied();
         }
     }
 
-    private PlayerInventorySlot GetSlotAt(int x, int y)
+    #endregion
+
+    #region Check functions
+
+    private bool CheckItemShape(List<PlayerInventorySlot> itemSlots, int startX, int startY)
+    {
+        for(int i=0; i<itemSlots.Count; i++)
+        {
+            try
+            {
+                if(GetSlot(startX+itemSlots[i].SlotX, startY + itemSlots[i].SlotY).Occupied) return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool CheckItemShape(List<PlayerInventorySlot> itemSlots, int itemID, int startX, int startY)
+    {
+        for(int i=0; i<itemSlots.Count; i++)
+        {
+            try
+            {
+                var slot = GetSlot(startX+itemSlots[i].SlotX, startY + itemSlots[i].SlotY);
+                if(slot.ItemID == itemID) continue;
+                if(slot.Occupied) return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    #endregion
+
+    #region Get functions
+
+    private PlayerInventorySlot GetSlot(int x, int y)
     {
         foreach(var slot in InventorySlots)
         {
@@ -116,4 +199,15 @@ public class PlayerInventory
         }
         throw new Exception("[PlayerInventory] GetSlotAt() Index out of range!");
     }
+
+    private PlayerInventoryItem GetItem(int itemID)
+    {
+        foreach(var item in InventoryItems)
+        {
+            if(item.ItemID == itemID) return item;
+        }
+        throw new Exception("[PlayerInventory] GetItem() => itemID not found!");
+    }
+
+    #endregion
 }

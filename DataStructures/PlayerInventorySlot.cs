@@ -1,12 +1,17 @@
-﻿namespace ApoFisher.DataStructures;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class PlayerInventorySlot 
+namespace ApoFisher.DataStructures;
+
+public partial class PlayerInventorySlot : ObservableObject
 {
-    public bool Occupied { get; private set; }
-    
+    // Slot properties
+    [ObservableProperty]
+    private bool _occupied;
+    public int ItemID       { get; private set; } = -1;
+
     // Slot virtual coordinates
-    public int SlotX     { get; private set; }
-    public int SlotY     { get; private set; }
+    public int SlotX        { get; private set; }
+    public int SlotY        { get; private set; }
 
     // Slot true coordinates (inventory canvas)
     public int LeftOffset   { get; private set; } 
@@ -21,13 +26,7 @@ public class PlayerInventorySlot
         TopOffset = SlotY * PlayerInventory.SlotSize;
     }
 
-    public void ToggleOccupied()
-    {
-        Occupied = !Occupied;
-    }
-
-    public override string ToString()
-    {
-        return "[PlayerInventorySlot][SlotX = "+SlotX+"][SlotY = "+SlotY+"][Occupied? "+Occupied+"]";
-    }
+    public void ToggleOccupied() => Occupied = !Occupied; 
+    public void SetItemID(int itemID) => ItemID = itemID;
+    public override string ToString() => "[PlayerInventorySlot][SlotX: "+SlotX+"][SlotY: "+SlotY+"][ItemID: "+ItemID+"][Occupied? "+Occupied+"]";
 }
