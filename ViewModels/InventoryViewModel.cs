@@ -22,9 +22,10 @@ public class InventoryViewModel : ViewModelBase
 
     public void ClickHandler(object sender, PointerPressedEventArgs e)
     {
+        if(!e.Properties.IsLeftButtonPressed) return;
         var slot = ((((e.Source as Image)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl)?.DataContext as PlayerInventorySlot;
         if(slot != null)
-        {
+        { 
             if(_selectedItemID == -1)
             { 
                 _selectedItemID = slot.ItemID;
@@ -35,6 +36,5 @@ public class InventoryViewModel : ViewModelBase
                 _selectedItemID = -1; 
             }
         }
-
     }
 }

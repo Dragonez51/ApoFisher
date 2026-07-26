@@ -200,7 +200,7 @@ public class PlayerInventory
         throw new Exception("[PlayerInventory] GetSlotAt() Index out of range!");
     }
 
-    private PlayerInventoryItem GetItem(int itemID)
+    public PlayerInventoryItem GetItem(int itemID)
     {
         foreach(var item in InventoryItems)
         {

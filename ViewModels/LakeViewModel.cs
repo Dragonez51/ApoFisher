@@ -112,11 +112,14 @@ public partial class LakeViewModel : ViewModelBase
         _timer.Stop();
         ResetFishing();
         // MainViewModel.Player.GetInventory().AddItem(new Fish("Trapgea", 12.0));
+        // Note: Check if it can be moved into [PlayerInventory]
         try
         {
             var drop = DropRandomizer<FishData>.Draw();
-            Debug.WriteLine("You Caught a "+drop);
-            MainViewModel.Player.GetInventory().AddItem(new Fish(drop.id, drop.minSize));
+            double dropSize = DropRandomizer<double>.DrawBetweenDouble(drop.minSize, drop.maxSize, 2);
+            var fish = new Fish(drop.id, dropSize);
+            MainViewModel.Player.GetInventory().AddItem(fish);
+            Debug.WriteLine("You Caught a "+fish);
         }
         catch(NullDrawException)
         {

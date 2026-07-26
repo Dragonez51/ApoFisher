@@ -16,6 +16,12 @@
 			<Panel>
 				<Border PointerPressed="OnPointerPressed" Width="{Binding ContainerSize}" Height="{Binding ContainerSize}">
 					<ItemsControl ItemsSource="{Binding InventorySlots}">
+						<ItemsControl.ItemContainerTheme>
+							<ControlTheme TargetType="ContentPresenter" x:DataType="ds:PlayerInventorySlot">
+								<Setter Property="Canvas.Top" Value="{Binding TopOffset}"/>
+								<Setter Property="Canvas.Left" Value="{Binding LeftOffset}"/>
+							</ControlTheme>
+						</ItemsControl.ItemContainerTheme>
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
 								<Canvas Width="{Binding CanvasSize}" Height="{Binding CanvasSize}"
@@ -28,6 +34,7 @@
 								<ctrl:InventorySlotControl  SlotX				="{Binding SlotX}"
 															SlotY				="{Binding SlotY}"
 															Occupied			="{Binding Occupied}"
+															ItemID              ="{Binding ItemID}"
 															SlotBackground		="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotBackground}"
 															SlotBackgroundSize	="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
 															Width				="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
@@ -35,18 +42,17 @@
 								/>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
-						<ItemsControl.Styles>
-							<Style Selector="ContentPresenter" x:DataType="ds:PlayerInventorySlot">
-								<Setter Property="Canvas.Top" Value="{Binding TopOffset}"/>
-								<Setter Property="Canvas.Left" Value="{Binding LeftOffset}"/>
-							</Style>
-						</ItemsControl.Styles>
 					</ItemsControl>
 				</Border>
 				<!--Inventory Items (Item Icons)-->
-				<!--Main click handler-->
-				<Border PointerPressed="OnPointerPressed">
+				<Border>
 					<ItemsControl ItemsSource="{Binding InventoryItems}">
+						<ItemsControl.ItemContainerTheme>
+							<ControlTheme TargetType="ContentPresenter" x:DataType="ds:PlayerInventoryItem">
+								<Setter Property="Canvas.Top" Value="{Binding IconPositionY}"/>
+								<Setter Property="Canvas.Left" Value="{Binding IconPositionX}"/>
+							</ControlTheme>
+						</ItemsControl.ItemContainerTheme>
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
 								<Canvas Width="{Binding CanvasSize}" Height="{Binding CanvasSize}"
@@ -63,12 +69,6 @@
 									/>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
-						<ItemsControl.Styles>
-							<Style Selector="ContentPresenter" x:DataType="ds:PlayerInventoryItem">
-								<Setter Property="Canvas.Left" Value="{Binding IconPositionX}"/>
-								<Setter Property="Canvas.Top" Value="{Binding IconPositionY}"/>
-							</Style>
-						</ItemsControl.Styles>
 					</ItemsControl>
 				</Border>
 			</Panel>
