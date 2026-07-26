@@ -14,7 +14,7 @@
 	<Border Background="#0fa" BorderThickness="3" BorderBrush="BlueViolet">
 		<ScrollViewer>
 			<Panel>
-				<Border PointerPressed="OnPointerPressed" Width="{Binding ContainerSize}" Height="{Binding ContainerSize}">
+				<Border PointerPressed="OnPointerPressed">
 					<ItemsControl ItemsSource="{Binding InventorySlots}">
 						<ItemsControl.ItemContainerTheme>
 							<ControlTheme TargetType="ContentPresenter" x:DataType="ds:PlayerInventorySlot">
@@ -24,7 +24,7 @@
 						</ItemsControl.ItemContainerTheme>
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
-								<Canvas Width="{Binding CanvasSize}" Height="{Binding CanvasSize}"
+								<Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"
 										HorizontalAlignment="Center" VerticalAlignment="Center"
 									/>
 							</ItemsPanelTemplate>
@@ -55,20 +55,27 @@
 						</ItemsControl.ItemContainerTheme>
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
-								<Canvas Width="{Binding CanvasSize}" Height="{Binding CanvasSize}"
+								<Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"
 										HorizontalAlignment="Center" VerticalAlignment="Center"
 									/>
 							</ItemsPanelTemplate>
 						</ItemsControl.ItemsPanel>
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<Image 	Source="{Binding Icon}"
-										Width="{Binding IconWidth}"
-										Height="{Binding IconHeight}"
-										IsHitTestVisible="False"
+								<Border BorderBrush="AliceBlue">
+									<Image 	Source="{Binding Icon}"
+											Width="{Binding IconWidth}"
+											Height="{Binding IconHeight}"
+											IsHitTestVisible="False"
 									/>
+								</Border>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
+						<ItemsControl.Styles>
+							<Style Selector="Border" x:DataType="ds:PlayerInventoryItem">
+								<Setter Property="BorderThickness" Value="{Binding BorderBrushThickness}"/>
+							</Style>
+						</ItemsControl.Styles>
 					</ItemsControl>
 				</Border>
 			</Panel>

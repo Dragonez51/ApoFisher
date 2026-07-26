@@ -10,6 +10,7 @@ public class Player
 
     public Player() { Inventory = new PlayerInventory(); initialize(); }
     public Player(int inventoryCapacity) { Inventory = new PlayerInventory(inventoryCapacity); initialize(); }
+    public Player(int inventoryWidth, int inventoryHeight) { Inventory = new PlayerInventory(inventoryWidth, inventoryHeight); initialize(); }
     public Player(int strength, int dexterity, int intelligence, int maxHealth, int maxStamina){ Inventory = new PlayerInventory(); initialize(); }
     public Player(int strength, int dexterity, int intelligence, int maxHealth, int maxStamina, int inventoryCapacity) { Inventory = new PlayerInventory(inventoryCapacity); initialize(); }
 

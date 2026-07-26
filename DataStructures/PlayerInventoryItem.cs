@@ -8,18 +8,22 @@ public partial class PlayerInventoryItem : ObservableObject
 {
     public static int MinID { get; set; } = 0;
 
+    public static Avalonia.Thickness SelectedBorderBrushThickness = Avalonia.Thickness.Parse("3");
+
     // Properties:
-    public Item Item    { get; private set; }
-    public int RootX    { get; private set; }
-    public int RootY    { get; private set; }
-    public int ItemID   { get; private set;}
+    public Item Item        { get; private set; }
+    public int RootX        { get; private set; }
+    public int RootY        { get; private set; }
+    public int ItemID       { get; private set; }
 
     // UI properties:
-    public Bitmap Icon          { get => ImgDB.Get(Item.GetName()); }
     [ObservableProperty] private int _iconPositionX;
     [ObservableProperty] private int _iconPositionY;
-    public int IconWidth        { get => Item.GetItemShape().Width * PlayerInventory.SlotSize; }
-    public int IconHeight       { get => Item.GetItemShape().Height * PlayerInventory.SlotSize; }
+    [ObservableProperty] private Avalonia.Thickness _borderBrushThickness;
+    public Bitmap Icon              { get => ImgDB.Get(Item.GetName()); }
+    public int IconWidth            { get => Item.GetItemShape().Width * PlayerInventory.SlotSize; }
+    public int IconHeight           { get => Item.GetItemShape().Height * PlayerInventory.SlotSize; }
+    // public int BorderBrushThickness { get; private set; }
 
     public PlayerInventoryItem(Item item, int rootX, int rootY)
     {
@@ -47,6 +51,9 @@ public partial class PlayerInventoryItem : ObservableObject
         IconPositionX = (x+Item.GetItemShape().MinX) * PlayerInventory.SlotSize;
         IconPositionY = y * PlayerInventory.SlotSize;
     }
+
+    public void SelectItem()   => BorderBrushThickness = SelectedBorderBrushThickness;
+    public void DeSelectItem() => BorderBrushThickness = Avalonia.Thickness.Parse("0");
 
     public override string ToString()
     {

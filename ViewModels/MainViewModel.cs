@@ -1,23 +1,15 @@
-using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
-using ApoFisher.DataBases;
 using ApoFisher.DataStructures;
+using Avalonia.Controls;
 
 namespace ApoFisher.ViewModels;
 
 public partial class MainViewModel : ViewModelBase 
 {
     private static MainViewModel? _self;
-    public static Player Player = new Player();
+    public static Player Player = new Player(5, 8);
 
-    // Later on, move it to a different
-    // view not to trash this view.
-    public int HP { get => Player.GetHP(); }
-    public int MaxHP { get => Player.GetMaxHP(); }
-    public int Stamina { get => Player.GetStamina(); }
-    public int MaxStamina { get => Player.GetMaxStamina(); }
-
-    public Bitmap MenuLogo { get => ImgDB.Get("Menu"); }
+    // public Bitmap MenuLogo { get => ImgDB.Get("Menu"); }
 
     private ViewModelBase? _currentViewModel;
     public ViewModelBase? CurrentViewModel { get => _currentViewModel; set => SetProperty(ref _currentViewModel, value); }
@@ -28,6 +20,9 @@ public partial class MainViewModel : ViewModelBase
 
     private bool _statusVisibility;
     public bool StatusVisibility { get => _statusVisibility; set => SetProperty(ref _statusVisibility, value); }
+
+    private GridLength _playerViewCD = GridLength.Parse("0");
+    public GridLength PlayerViewCD { get => _playerViewCD; set => SetProperty(ref _playerViewCD, value); }
 
     public MainViewModel()
     {
@@ -85,8 +80,9 @@ public partial class MainViewModel : ViewModelBase
 
     [RelayCommand] public void RouteInventory()
     { 
-        if(CurrentViewModel is InventoryViewModel) { CurrentViewModel = null; return; }
+        if(CurrentViewModel is InventoryViewModel) { CurrentViewModel = null; PlayerViewCD = GridLength.Parse("0"); return; }
         CurrentViewModel = new InventoryViewModel();
+        PlayerViewCD = GridLength.Parse("350");
     }
     [RelayCommand] public void RouteGlossary()
     { 

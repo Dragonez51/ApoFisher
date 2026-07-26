@@ -10,7 +10,8 @@ public class PlayerInventory
     #region Inventory Properties
     
     private int _defaultSize = 6;
-    public static int Size { get; private set; } // size of inventory (size x size)
+    public static int Width { get; private set; }
+    public static int Height { get; private set; }
     public static int SlotSize { get => 64; }
     public static int CanvasOffset { get => 16; }
 
@@ -25,23 +26,32 @@ public class PlayerInventory
     {
         InventorySlots = new ();
         InventoryItems = new ();
-        GenerateSlots(_defaultSize);
-        Size = _defaultSize;
+        Width = _defaultSize;
+        Height = _defaultSize;
+        GenerateSlots(_defaultSize, _defaultSize);
     }
 
     public PlayerInventory(int size) 
     {
         InventorySlots = new ();
         InventoryItems = new ();
-        GenerateSlots(size);
-        Size = size;
+        Width = size;
+        Height = size;
+        GenerateSlots(size, size);
+    }
+    public PlayerInventory(int width, int height) 
+    {
+        InventorySlots = new ();
+        InventoryItems = new ();
+        Width = width;
+        Height = height;
+        GenerateSlots(width, height);
     }
     
-    // Add size x size slots to InventorySlots list.
-    private void GenerateSlots(int size) 
+    private void GenerateSlots(int width, int height) 
     { 
-        for (int y = 0; y < size; y++)
-            for(int x = 0; x < size; x++)
+        for (int y = 0; y < height; y++)
+            for(int x = 0; x < width; x++)
                 InventorySlots.Add(new PlayerInventorySlot(x, y)); 
     }
 

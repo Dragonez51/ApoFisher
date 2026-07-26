@@ -13,12 +13,12 @@ public class InventoryViewModel : ViewModelBase
     public ObservableCollection<PlayerInventorySlot> InventorySlots { get => MainViewModel.Player.GetInventory().InventorySlots; }
     public ObservableCollection<PlayerInventoryItem> InventoryItems { get => MainViewModel.Player.GetInventory().InventoryItems; }
     public int SlotSize             { get => PlayerInventory.SlotSize; }
-    public int CanvasSize           { get => SlotSize * PlayerInventory.Size; }
-    public int ContainerSize        { get => CanvasSize + (PlayerInventory.CanvasOffset*2); }
+    public int CanvasWidth          { get => SlotSize * PlayerInventory.Width; }
+    public int CanvasHeight         { get => SlotSize * PlayerInventory.Height; }
     public int CanvasOffset         { get => PlayerInventory.CanvasOffset; }
     public Bitmap SlotBackground    { get => ImgDB.Get("InventorySlot"); }
 
-    private int _selectedItemID = -1;
+    private PlayerInventoryItem? _selectedItem = null;
 
     public void ClickHandler(object sender, PointerPressedEventArgs e)
     {
@@ -26,14 +26,17 @@ public class InventoryViewModel : ViewModelBase
         var slot = ((((e.Source as Image)?.Parent as Canvas)?.Parent as Border)?.Parent as InventorySlotControl)?.DataContext as PlayerInventorySlot;
         if(slot != null)
         { 
-            if(_selectedItemID == -1)
+            if(_selectedItem is null)
             { 
-                _selectedItemID = slot.ItemID;
+                if(slot.ItemID == -1) return;
+                _selectedItem = MainViewModel.Player.GetInventory().GetItem(slot.ItemID);
+                _selectedItem.SelectItem();
             }
             else 
             { 
-                MainViewModel.Player.GetInventory().MoveItem(_selectedItemID, slot.SlotX, slot.SlotY); 
-                _selectedItemID = -1; 
+                MainViewModel.Player.GetInventory().MoveItem(_selectedItem.ItemID, slot.SlotX, slot.SlotY); 
+                _selectedItem.DeSelectItem();
+                _selectedItem = null;
             }
         }
     }
