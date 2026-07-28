@@ -7,6 +7,15 @@ public class GlossaryDB
 {
     public static ObservableCollection<GlossaryCategory> Glossary = new()
     {
+        new GlossaryCategory("Fish Lake 1", new ObservableCollection<GlossaryEntry>()
+        {
+            new (   "Bob"               , "His name is Bob."                                            ),
+            new (   "Bulbo"             , "His name is Bulbo."                                          ),
+            new (   "Gary"              , "His name is Gary."                                           ),
+            new (   "Seeker"            , "His name is a Seeker."                                       ),
+            new (   "Jelly Fish"        , "It's just a jelly fish."                                     ),
+            new (   "Trapgea"           , "This is commonly known as a trapgea."                        ),
+        }),
         new GlossaryCategory("Weapons", new ObservableCollection<GlossaryEntry>()
         {
             new (   "Wooden Sword"      ,  "This is a wooden sword that was found by your bunker."      ),
@@ -59,12 +68,14 @@ public class GlossaryDB
     {
         switch (categoryName)
         {
-            case "Weapons":
+            case "Fish Lake 1":
                 return Glossary[0];
-            case "Food":
+            case "Weapons":
                 return Glossary[1];
-            case "Materials":
+            case "Food":
                 return Glossary[2];
+            case "Materials":
+                return Glossary[3];
             default:
                 throw new System.Exception("[GlossaryDB]=>GetCategory("+categoryName+") || categoryName is null");
         }

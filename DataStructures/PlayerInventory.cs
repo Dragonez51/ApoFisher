@@ -1,75 +1,223 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace ApoFisher.DataStructures;
 
 public class PlayerInventory
 {
-    private ObservableCollection<PlayerInventorySlot> InventorySlots;
-    private static PlayerInventorySlot HelmetSlot      = new PlayerInventorySlot(-2);
-    private static PlayerInventorySlot GauntletLSlot   = new PlayerInventorySlot(-3);
-    private static PlayerInventorySlot ChestplateSlot  = new PlayerInventorySlot(-4);
-    private static PlayerInventorySlot GauntletRSlot   = new PlayerInventorySlot(-5);
-    private static PlayerInventorySlot HandLSlot       = new PlayerInventorySlot(-6);
-    private static PlayerInventorySlot BootsSlot       = new PlayerInventorySlot(-7);
-    private static PlayerInventorySlot HandRSlot       = new PlayerInventorySlot(-8);
+    #region Inventory Properties
+    
+    private int _defaultSize = 6;
+    public static int Width { get; private set; }
+    public static int Height { get; private set; }
+    public static int SlotSize { get => 64; }
+    public static int CanvasOffset { get => 16; }
 
-    public static PlayerInventorySlot[] ArmorSlots =
-    {
-        HelmetSlot,
-        GauntletLSlot,
-        ChestplateSlot,
-        GauntletRSlot,
-        HandLSlot,
-        BootsSlot,
-        HandRSlot
-    };
+    #endregion
+
+    public ObservableCollection<PlayerInventorySlot> InventorySlots { get; private set; } // list of inventory slots
+    public ObservableCollection<PlayerInventoryItem> InventoryItems { get; private set; } // list of items in inventory
+
+    #region Initialization
 
     public PlayerInventory() 
     {
-        InventorySlots = new ObservableCollection<PlayerInventorySlot>();
-        AddSlots(20);
+        InventorySlots = new ();
+        InventoryItems = new ();
+        Width = _defaultSize;
+        Height = _defaultSize;
+        GenerateSlots(_defaultSize, _defaultSize);
     }
 
-    public PlayerInventory(int slotsCount) 
+    public PlayerInventory(int size) 
     {
-        InventorySlots = new ObservableCollection<PlayerInventorySlot>();
-        AddSlots(slotsCount);
-        AddTwoItems();
+        InventorySlots = new ();
+        InventoryItems = new ();
+        Width = size;
+        Height = size;
+        GenerateSlots(size, size);
+    }
+    public PlayerInventory(int width, int height) 
+    {
+        InventorySlots = new ();
+        InventoryItems = new ();
+        Width = width;
+        Height = height;
+        GenerateSlots(width, height);
+    }
+    
+    private void GenerateSlots(int width, int height) 
+    { 
+        for (int y = 0; y < height; y++)
+            for(int x = 0; x < width; x++)
+                InventorySlots.Add(new PlayerInventorySlot(x, y)); 
     }
 
-    public void SwapItems(int FirstID, int SecondID) 
+    #endregion
+
+    #region Item Addition
+
+    // Add an item to the InventoryItems
+    public void AddItem(Item item)
     {
-        if (FirstID < -1) 
+
+        // Go through every slot in inventory
+        foreach(var invSlot in InventorySlots)
         {
-            SwapArmorItem(FirstID, SecondID);
-            return;
-        }
-        if (SecondID < -1) 
-        {
-            SwapArmorItem(SecondID, FirstID);
-            return;
+            // find an empty slot
+            if (!invSlot.Occupied)
+            {
+                int startX = invSlot.SlotX;
+                int startY = invSlot.SlotY;
+
+                // if the path is clear, add this item
+                // starting from the currently checked slot
+                if (CheckItemShape(item.GetItemShape().ItemSlots, startX, startY))
+                {
+                    AddItemAt(item, startX, startY);
+                    return;
+                }
+                // if path is not clear, look for another slot.
+            }
         }
 
-        PlayerInventorySlot temp        = InventorySlots[FirstID];
-        InventorySlots[FirstID]         = InventorySlots[SecondID];
-        InventorySlots[SecondID]        = temp;
-        InventorySlots[FirstID].SlotID  = FirstID;
-        InventorySlots[SecondID].SlotID = SecondID;
+        // NOTE: Come up with a solution for an item adder blockage.
+        Debug.WriteLine("Could not find space for this item!");
     }
 
-    public void SwapArmorItem(int firstID, int secondID) 
+    private void AddItemAt(Item item, int x, int y)
     {
-        int armorID = (firstID + 2) * -1;
+        // Add to list:
+        var newItem = new PlayerInventoryItem(item, x, y);
+        InventoryItems.Add(newItem);
 
-        PlayerInventorySlot temp        = ArmorSlots[armorID];
-        ArmorSlots[armorID]             = InventorySlots[secondID];
-        InventorySlots[secondID]        = temp;
-        ArmorSlots[armorID].SlotID      = firstID;
-        InventorySlots[secondID].SlotID = secondID;
-
+        FlushItemSlots(newItem, x, y);       
     }
 
-    private void AddTwoItems() { InventorySlots[0] = new PlayerInventorySlot(0, 1); InventorySlots[1] = new PlayerInventorySlot(1, 6); }
-    private void AddSlots(int amount) { for (int i = 0; i < amount; i++) { InventorySlots.Add(new PlayerInventorySlot(i)); } }
-    public ObservableCollection<PlayerInventorySlot> GetInventorySlots() => InventorySlots;
+    #endregion
+
+    #region Item Deletion
+
+    public void DeleteItem(int itemID)
+    {
+        DeleteItemUI(itemID);
+        DeleteItemStructure(itemID);
+    }
+
+    private void DeleteItemUI(int itemID)
+    {
+        foreach(var invSlot in InventorySlots)
+        {
+            if (invSlot.Occupied && invSlot.ItemID == itemID)
+            {
+                invSlot.SetItemID(-1);
+                invSlot.ToggleOccupied();
+            }
+        }
+    }
+
+    private void DeleteItemStructure(int itemID)
+    {
+        foreach(var item in InventoryItems)
+        {
+            if(item.ItemID == itemID)
+            {
+                InventoryItems.Remove(item);
+                break;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Item Movement
+
+    public void MoveItem(int itemID, int x, int y)
+    {
+        var listItem = GetItem(itemID);
+        if(CheckItemShape(listItem.Item.GetItemShape().ItemSlots, itemID, x, y))
+        {
+            DeleteItemUI(itemID);
+            listItem.MoveItem(x, y);
+            FlushItemSlots(listItem, x, y);
+        }
+    }
+
+    #endregion
+
+    #region Update functions
+
+    private void FlushItemSlots(PlayerInventoryItem listItem, int x, int y)
+    {
+        foreach(var itemSlot in listItem.Item.GetItemShape().ItemSlots)
+        {
+            var slot = GetSlot(x + itemSlot.SlotX, y + itemSlot.SlotY);
+            slot.SetItemID(listItem.ItemID);
+            slot.ToggleOccupied();
+        }
+    }
+
+    #endregion
+
+    #region Check functions
+
+    private bool CheckItemShape(List<PlayerInventorySlot> itemSlots, int startX, int startY)
+    {
+        for(int i=0; i<itemSlots.Count; i++)
+        {
+            try
+            {
+                if(GetSlot(startX+itemSlots[i].SlotX, startY + itemSlots[i].SlotY).Occupied) return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool CheckItemShape(List<PlayerInventorySlot> itemSlots, int itemID, int startX, int startY)
+    {
+        for(int i=0; i<itemSlots.Count; i++)
+        {
+            try
+            {
+                var slot = GetSlot(startX+itemSlots[i].SlotX, startY + itemSlots[i].SlotY);
+                if(slot.ItemID == itemID) continue;
+                if(slot.Occupied) return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    #endregion
+
+    #region Get functions
+
+    private PlayerInventorySlot GetSlot(int x, int y)
+    {
+        foreach(var slot in InventorySlots)
+        {
+            if(slot.SlotX == x && slot.SlotY == y) return slot;
+        }
+        throw new Exception("[PlayerInventory] GetSlotAt() Index out of range!");
+    }
+
+    public PlayerInventoryItem GetItem(int itemID)
+    {
+        foreach(var item in InventoryItems)
+        {
+            if(item.ItemID == itemID) return item;
+        }
+        throw new Exception("[PlayerInventory] GetItem() => itemID not found!");
+    }
+
+    #endregion
 }

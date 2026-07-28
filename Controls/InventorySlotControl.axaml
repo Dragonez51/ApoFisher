@@ -11,25 +11,21 @@
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border Name="ItemSlot">
-					<!--
 					<Border.ContextMenu>
-						<ContextMenu>
-							<MenuItem Header="Equip" Command="{TemplateBinding Equip}"/>
-							<MenuItem Header="Discard" Command="{TemplateBinding Discard}"/>
+						<ContextMenu DataContext="{Binding $parent[ctrl:InventorySlotControl]}" IsVisible="{Binding ItemExists}">
+							<MenuItem Header="{Binding ItemName}"/>
+							<MenuItem Header="{Binding ItemSize}" IsVisible="{Binding IsItemFish}"/>
+							<MenuItem Header="{Binding ItemValue}" IsVisible="{Binding IsItemFish}"/>
 						</ContextMenu>
 					</Border.ContextMenu>
-					-->
 					<Canvas>
 						<Image		Source="{TemplateBinding SlotBackground}"
 									Width="{TemplateBinding SlotBackgroundSize}"	Height="{TemplateBinding SlotBackgroundSize}"
 									/>
-						<Image		Source="{TemplateBinding ItemIcon}"
-									Width="{TemplateBinding ItemIconSize}"			Height="{TemplateBinding ItemIconSize}"
-									Canvas.Top="{TemplateBinding CanvasOffset}"		Canvas.Left="{TemplateBinding CanvasOffset}"
-									/>
-						<TextBlock	Text="{TemplateBinding ItemQuantity}"		
-									IsVisible="{TemplateBinding Visibility}"
-									Canvas.Bottom="{TemplateBinding CanvasOffset}"	Canvas.Right="{TemplateBinding CanvasOffset}"																					
+						<Rectangle	Fill="#aa000000"
+									Width="{TemplateBinding SlotBackgroundSize}"	Height="{TemplateBinding SlotBackgroundSize}"
+									IsVisible="{TemplateBinding Occupied}"
+									IsHitTestVisible="False"
 									/>
 					</Canvas>
 				</Border>

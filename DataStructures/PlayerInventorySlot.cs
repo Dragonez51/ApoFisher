@@ -1,36 +1,33 @@
-﻿using Avalonia.Media.Imaging;
-using ApoFisher.DataBases;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ApoFisher.DataStructures;
 
-public class PlayerInventorySlot 
+public partial class PlayerInventorySlot : ObservableObject
 {
-    protected Bitmap? _icon;
-    public Bitmap? Icon { get => _icon; set => _icon = value; }
-    public bool Visibility { get => Quantity != 0; }
+    // Slot properties
+    [ObservableProperty]
+    private bool _occupied;
+    [ObservableProperty]
+    private int _itemID = -1;
 
-    public int ItemID;
-    public int SlotID { get; set; }
-    public int Quantity { get; set; }
+    // Slot virtual coordinates
+    public int SlotX            { get; private set; }
+    public int SlotY            { get; private set; }
 
-    public PlayerInventorySlot(int slotID) 
+    // Slot true coordinates (inventory canvas)
+    public int LeftOffset       { get; private set; } 
+    public int TopOffset        { get; private set; }
+
+    public PlayerInventorySlot(int SlotX, int SlotY) 
     {
-        SlotID = slotID;
-        ItemID = -1;
-        Quantity = 0;
-        setUpIcon();
+        this.SlotX = SlotX;
+        this.SlotY = SlotY;
+        Occupied = false;
+        LeftOffset = SlotX * PlayerInventory.SlotSize;
+        TopOffset = SlotY * PlayerInventory.SlotSize;
     }
 
-    public PlayerInventorySlot(int slotID, int itemID)
-    {
-        SlotID = slotID;
-        ItemID = itemID;
-        Quantity = itemID;
-        setUpIcon();
-    }
-
-    private void setUpIcon() 
-    {
-        Icon = ItemID < 0 ? null : InventoryItemsDB.GetItemIcon(ItemID);
-    }
+    public void ToggleOccupied() => Occupied = !Occupied; 
+    public void SetItemID(int itemID) => ItemID = itemID;
+    public override string ToString() => "[PlayerInventorySlot][SlotX: "+SlotX+"][SlotY: "+SlotY+"][ItemID: "+ItemID+"][Occupied? "+Occupied+"]";
 }

@@ -5,14 +5,80 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 	xmlns:vm="clr-namespace:ApoFisher.ViewModels"
+	xmlns:v="clr-namespace:ApoFisher.Views"
+	xmlns:ds="clr-namespace:ApoFisher.DataStructures"
 	xmlns:ctrl="clr-namespace:ApoFisher.Controls"
 	x:Class="ApoFisher.Views.InventoryView"
+	x:DataType="vm:InventoryViewModel"
 	>
-	<Border PointerPressed="OnPointerPressed">
-		<ScrollViewer Grid.Column="0">
-			<UserControl>
-				<vm:InventoryListViewModel/>
-			</UserControl>
+	<Border Background="#0fa" BorderThickness="3" BorderBrush="BlueViolet">
+		<ScrollViewer>
+			<Panel>
+				<Border PointerPressed="OnPointerPressed">
+					<ItemsControl ItemsSource="{Binding InventorySlots}">
+						<ItemsControl.ItemContainerTheme>
+							<ControlTheme TargetType="ContentPresenter" x:DataType="ds:PlayerInventorySlot">
+								<Setter Property="Canvas.Top" Value="{Binding TopOffset}"/>
+								<Setter Property="Canvas.Left" Value="{Binding LeftOffset}"/>
+							</ControlTheme>
+						</ItemsControl.ItemContainerTheme>
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"
+										HorizontalAlignment="Center" VerticalAlignment="Center"
+									/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>		
+								<ctrl:InventorySlotControl  SlotX				="{Binding SlotX}"
+															SlotY				="{Binding SlotY}"
+															Occupied			="{Binding Occupied}"
+															ItemID              ="{Binding ItemID}"
+															SlotBackground		="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotBackground}"
+															SlotBackgroundSize	="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
+															Width				="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
+															Height				="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
+								/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</Border>
+				<!--Inventory Items (Item Icons)-->
+				<Border>
+					<ItemsControl ItemsSource="{Binding InventoryItems}">
+						<ItemsControl.ItemContainerTheme>
+							<ControlTheme TargetType="ContentPresenter" x:DataType="ds:PlayerInventoryItem">
+								<Setter Property="Canvas.Top" Value="{Binding IconPositionY}"/>
+								<Setter Property="Canvas.Left" Value="{Binding IconPositionX}"/>
+							</ControlTheme>
+						</ItemsControl.ItemContainerTheme>
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"
+										HorizontalAlignment="Center" VerticalAlignment="Center"
+									/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border BorderBrush="AliceBlue">
+									<Image 	Source="{Binding Icon}"
+											Width="{Binding IconWidth}"
+											Height="{Binding IconHeight}"
+											IsHitTestVisible="False"
+									/>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+						<ItemsControl.Styles>
+							<Style Selector="Border" x:DataType="ds:PlayerInventoryItem">
+								<Setter Property="BorderThickness" Value="{Binding BorderBrushThickness}"/>
+							</Style>
+						</ItemsControl.Styles>
+					</ItemsControl>
+				</Border>
+			</Panel>
 		</ScrollViewer>
 	</Border>
 </UserControl>

@@ -14,6 +14,14 @@ public class ImgDB
         {   "InventoryLogo"         ,       GetIcon(9, 8)                                       },
         {   "GlossaryLogo"          ,       GetIcon(8,13)                                       },
         {   "TraverseLogo"          ,       GetIcon(12, 13)                                     },
+        {   "SettingsLogo"          ,       BitmapHelper.Load("Images/Settings.png")            },
+        //                 Fish    
+        {   "Bulbo"                 ,       BitmapHelper.Load("Images/Bulbo.png")               },
+        {   "Bob"                   ,       BitmapHelper.Load("Images/Bob.png")                 },
+        {   "Gary"                  ,       BitmapHelper.Load("Images/Gary.png")                },
+        {   "Jelly Fish"            ,       BitmapHelper.Load("Images/Jelly Fish.png")          },
+        {   "Seeker"                ,       BitmapHelper.Load("Images/Seeker.png")              },
+        {   "Trapgea"               ,       BitmapHelper.Load("Images/Trapgea.png")             },
         //           Weapons / Tools    
         {   "Wooden Sword"          ,       GetIcon(0, 5)                                       },
         {   "Iron Sword"            ,       GetIcon(1, 5)                                       },
@@ -26,12 +34,6 @@ public class ImgDB
         {   "Slingshot"             ,       GetIcon(5, 6)                                       },
         {   "Knife"                 ,       BitmapHelper.Load("Images/FishermansKnife.png")     },
         {   "Fishing Rod"           ,       BitmapHelper.Load("Images/FishingRod0.png")         },
-        //                Armor
-        {   "Helmet"                ,       BitmapHelper.Load("Images/Helmet.png")              },
-        {   "Chestplate"            ,       BitmapHelper.Load("Images/Chestplate.png")          },
-        {   "GauntletL"             ,       BitmapHelper.Load("Images/GauntletL.png")           },
-        {   "GauntletR"             ,       BitmapHelper.Load("Images/GauntletR.png")           },
-        {   "Boots"                 ,       BitmapHelper.Load("Images/Boots.png")               },
         //                Food
         {   "Apple"                 ,       GetIcon(0, 14)                                      },
         {   "Banana"                ,       GetIcon(1, 14)                                      },
@@ -58,27 +60,11 @@ public class ImgDB
         {   "Leather"               ,       GetIcon(8, 17)                                      },
         {   "Tooth"                 ,       GetIcon(9, 17)                                      },
         //          Map Elements    
-        {   "RoomS"                 ,       BitmapHelper.Load("Images/Room0_2.png")             },
-        {   "RoomL"                 ,       BitmapHelper.Load("Images/RoomL_1.png")             },
-        {   "RoomF"                 ,       BitmapHelper.Load("Images/RoomF_0.png")             },
-        {   "RoomR"                 ,       BitmapHelper.Load("Images/RoomL_-1.png")            },
-        {   "Room0"                 ,       BitmapHelper.Load("Images/Room0_0.png")             },
+
         //          UI Elements
-        {   "Logo"                  ,       BitmapHelper.Load("Images/Logo.png")                },
-        {   "SettingsLogo"          ,       BitmapHelper.Load("Images/Settings.png")            }, // Duplicate
-        {   "ArrowR"                ,       BitmapHelper.Load("Images/Arrow_Right.png")         },
-        {   "ArrowL"                ,       BitmapHelper.Load("Images/Arrow_Left.png")          },
-        {   "ArrowU"                ,       BitmapHelper.Load("Images/Arrow_Up.png")            },
-        {   "ArrowD"                ,       BitmapHelper.Load("Images/Arrow_Down.png")          },
         {   "Expand"                ,       BitmapHelper.Load("Images/ExpandIcon.png")          },
         {   "Collapse"              ,       BitmapHelper.Load("Images/ShrinkIcon.png")          },
-        {   "Settings"              ,       BitmapHelper.Load("Images/Settings.png")            }, // Duplicate
-        {   "EmptySlot"             ,       BitmapHelper.Load("Images/EmptySlot.png")           },
-        {   "HelmetPH"              ,       BitmapHelper.Load("Images/HelmetPH.png")            },
-        {   "ChestplatePH"          ,       BitmapHelper.Load("Images/ChestplatePH.png")        },
-        {   "BootsPH"               ,       BitmapHelper.Load("Images/BootsPH.png")             },
-        {   "GauntletLPH"           ,       BitmapHelper.Load("Images/GauntletLPH.png")         },
-        {   "GauntletRPH"           ,       BitmapHelper.Load("Images/GauntletRPH.png")         },
+        {   "InventorySlot"         ,       BitmapHelper.Load("Images/InventorySlot.png")       },
         {   "Menu"                  ,       BitmapHelper.Load("Images/FishMenu.png")            },
     };
 

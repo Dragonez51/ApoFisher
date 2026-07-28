@@ -7,6 +7,14 @@ public static class DropRandomizer<T>
 {
     public static List<DropElement<T>> DropList { get; set; } = [];
 
+    public static double DrawBetweenDouble(double min, double max, int precision)
+    {
+        Random rand = new Random();
+        double round = 1;
+        for(int i=0; i<precision; i++) round*=10.0;
+        return Math.Round(((rand.NextDouble() * (max - min)) + min) * round) / round ;
+    }
+
     public static void AddElement(T Element, double chance)
     {
         DropList.Add(new DropElement<T>(Element, chance));
@@ -42,6 +50,6 @@ public static class DropRandomizer<T>
                 return drop.Drop;
             }
         }
-        throw new Exception("[DropRandomizer](Draw) drew a null item!");
+        throw new NullDrawException("[DropRandomizer](Draw) drew a null item!");
     }
 }
