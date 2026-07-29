@@ -1,4 +1,3 @@
-using CommunityToolkit.Mvvm.Input;
 using ApoFisher.DataStructures;
 using Avalonia.Controls;
 
@@ -7,7 +6,7 @@ namespace ApoFisher.ViewModels;
 public partial class MainViewModel : ViewModelBase 
 {
     private static MainViewModel? _self;
-    public static Player Player = new Player(5, 8);
+    public static Player Player = new Player(5, 9);
 
     // public Bitmap MenuLogo { get => ImgDB.Get("Menu"); }
 
@@ -23,6 +22,11 @@ public partial class MainViewModel : ViewModelBase
 
     private GridLength _playerViewCD = GridLength.Parse("0");
     public GridLength PlayerViewCD { get => _playerViewCD; set => SetProperty(ref _playerViewCD, value); }
+    // private GridLength _workspaceViewCD = GridLength.Parse("0");
+    // public GridLength WorkspaceViewCD { get => _workspaceViewCD; set => SetProperty(ref _workspaceViewCD, value); }
+
+    private ViewModelBase? _workspaceContent;
+    public ViewModelBase? WorkspaceContent { get => _workspaceContent; set => SetProperty(ref _workspaceContent, value); }
 
     public MainViewModel()
     {
@@ -40,6 +44,9 @@ public partial class MainViewModel : ViewModelBase
             case "Village":
                 _self?.RouteVillage();
                 break;
+            case "Market":
+                _self?.RouteMarket();
+                break;
             case "Lake 1":
                 _self?.RouteLake(1);
                 break;
@@ -53,7 +60,7 @@ public partial class MainViewModel : ViewModelBase
                 _self?.RouteLake(4);
                 break;
             default:
-                throw new System.Exception("[MainViewModel](Route)(RouteLocation) -> Invalid argument => "+locationName);
+                throw new System.Exception("[MainViewModel] RouteLocation() -> Invalid argument => "+locationName);
         }
     }
 
@@ -78,23 +85,33 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    [RelayCommand] public void RouteInventory()
+    public void RouteInventory()
     { 
         if(CurrentViewModel is InventoryViewModel) { CurrentViewModel = null; PlayerViewCD = GridLength.Parse("0"); return; }
-        CurrentViewModel = new InventoryViewModel();
+        CurrentViewModel = new InventoryViewModel(Player.GetInventory());
         PlayerViewCD = GridLength.Parse("350");
     }
-    [RelayCommand] public void RouteGlossary()
+    public void RouteGlossary()
     { 
         if(CurrentViewModel is GlossaryViewModel) { CurrentViewModel = null; return; }
         CurrentViewModel = new GlossaryViewModel();    
     }
-    [RelayCommand] public void RouteSettings() => SwitchSettingsVisibility();
-    [RelayCommand] public void RouteTraverse() => CurrentLocation = new TraverseViewModel();
-    [RelayCommand] public void RouteVillage() => CurrentLocation = new VillageViewModel();
+    public void RouteSettings() => SwitchSettingsVisibility();
+    public void RouteTraverse() => CurrentLocation = new TraverseViewModel();
+    public void RouteVillage() 
+    {
+        CurrentLocation = new VillageViewModel();
+        // WorkspaceViewCD = GridLength.Parse("0");
+    }
+    public void RouteMarket()
+    { 
+        WorkspaceContent = new InventoryViewModel(new Inventory());
+        CurrentLocation = new MarketViewModel();
+        // WorkspaceViewCD = GridLength.Parse("300");
+    }
 
-    [RelayCommand] private void RouteLake(int lvl) => CurrentLocation = new LakeViewModel(lvl);
+    private void RouteLake(int lvl) => CurrentLocation = new LakeViewModel(lvl);
 
-    [RelayCommand] public void SwitchStatusVisibility() => StatusVisibility = !StatusVisibility;
-    [RelayCommand] public void SwitchSettingsVisibility() => SettingsVisible = !SettingsVisible;
+    public void SwitchStatusVisibility() => StatusVisibility = !StatusVisibility;
+    public void SwitchSettingsVisibility() => SettingsVisible = !SettingsVisible;
 }

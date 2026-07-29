@@ -16,18 +16,20 @@ public partial class InventorySlotControl : TemplatedControl
     public static readonly StyledProperty<int>          SlotXProperty               = AvaloniaProperty.Register<InventorySlotControl, int>(nameof(SlotX));
     public static readonly StyledProperty<int>          SlotYProperty               = AvaloniaProperty.Register<InventorySlotControl, int>(nameof(SlotY));
     public static readonly StyledProperty<int>          ItemIDProperty              = AvaloniaProperty.Register<InventorySlotControl, int>(nameof(ItemID));
+    public static readonly StyledProperty<Inventory>    InventoryProperty           = AvaloniaProperty.Register<InventorySlotControl, Inventory>(nameof(Inventory));
     public Bitmap       SlotBackground          { get => GetValue(SlotBackgroundProperty);      }
     public bool         Occupied                { get => GetValue(OccupiedProperty);            }
     public int          SlotBackgroundSize      { get => GetValue(SlotBackgroundSizeProperty);  }
     public int          SlotX                   { get => GetValue(SlotXProperty);               }
     public int          SlotY                   { get => GetValue(SlotYProperty);               }
     public int          ItemID                  { get => GetValue(ItemIDProperty);              }
+    public Inventory    Inventory               { get => GetValue(InventoryProperty);           }
 
     #endregion
 
     #region Context Menu Data
 
-    public Item?        Item            { get { try { return MainViewModel.Player.GetInventory().GetItem(ItemID)?.Item; } catch(System.Exception) {return null; } } }
+    public Item?        Item            { get { try { return Inventory.GetItem(ItemID)?.Item; } catch(System.Exception) {return null; } } }
     public bool         ItemExists      { get => !(Item is null);                               }
     public string?      ItemName        { get => "Name: " + Item?.GetName();                    }
     public bool         IsItemFish      { get => !(Item as Fish is null);                       }

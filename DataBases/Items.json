@@ -1,8 +1,8 @@
 [
-    {  "id":"Bob",          "location":"Lake 1",   "minSize":10.0,   "maxSize":27.0,   "chance":40,   "itemShapeData":{ "shape":[[true, true, true], [true, true, true], [true, true, true]] }          },
-    {  "id":"Gary",         "location":"Lake 1",   "minSize":8.0,    "maxSize":15.0,   "chance":20,   "itemShapeData":{ "shape":[[false, false, false], [true, true, true], [false, false, false]] }    },
-    {  "id":"Bulbo",        "location":"Lake 1",   "minSize":8.0,    "maxSize":18.0,   "chance":10,   "itemShapeData":{ "shape":[[false, false, false], [true, true, false], [false, false, false]] }   },
-    {  "id":"Trapgea",      "location":"Lake 1",   "minSize":4.0,    "maxSize":12.0,   "chance":6,    "itemShapeData":{ "shape":[[false, true, false], [true, true, true], [false, true, false]] }          },
-    {  "id":"Seeker",       "location":"Lake 1",   "minSize":12.0,   "maxSize":30.0,   "chance":2.5,  "itemShapeData":{ "shape":[[false, true, true], [true, true, true], [false, true, true]] }          },
-    {  "id":"Jelly Fish",   "location":"Lake 1",   "minSize":10.0,   "maxSize":45.0,   "chance":1,    "itemShapeData":{ "shape":[[true, true, false], [true, true, false], [true, true, false]] }       }
+    {  "id":"Bob",          "location":"Lake 1",   "minSize":10.0,   "maxSize":27.0,   "chance":15,   "itemShapeData":{ "shape":[[true, true, true], [true, true, true], [true, true, true]] }          },
+    {  "id":"Gary",         "location":"Lake 1",   "minSize":8.0,    "maxSize":15.0,   "chance":15,   "itemShapeData":{ "shape":[[false, false, false], [true, true, true], [false, false, false]] }    },
+    {  "id":"Bulbo",        "location":"Lake 1",   "minSize":8.0,    "maxSize":18.0,   "chance":15,   "itemShapeData":{ "shape":[[false, false, false], [true, true, false], [false, false, false]] }   },
+    {  "id":"Trapgea",      "location":"Lake 1",   "minSize":4.0,    "maxSize":12.0,   "chance":15,   "itemShapeData":{ "shape":[[false, true, false], [true, true, true], [false, true, false]] }          },
+    {  "id":"Seeker",       "location":"Lake 1",   "minSize":12.0,   "maxSize":30.0,   "chance":15,   "itemShapeData":{ "shape":[[false, true, true], [true, true, true], [false, true, true]] }          },
+    {  "id":"Jelly Fish",   "location":"Lake 1",   "minSize":10.0,   "maxSize":45.0,   "chance":15,   "itemShapeData":{ "shape":[[true, true, false], [true, true, false], [true, true, false]] }       }
 ]

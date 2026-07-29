@@ -10,7 +10,7 @@ public class ImgDB
     {
         //                Logos
         {   "CraftingLogo"          ,       GetIcon(4,4)                                        },
-        {   "SkillsLogo"            ,       GetIcon(7,4)                                        },
+        {   "MarketLogo"            ,       GetIcon(7,4)                                        },
         {   "InventoryLogo"         ,       GetIcon(9, 8)                                       },
         {   "GlossaryLogo"          ,       GetIcon(8,13)                                       },
         {   "TraverseLogo"          ,       GetIcon(12, 13)                                     },

@@ -4,14 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:ApoFisher.ViewModels"
 		xmlns:ctrl="clr-namespace:ApoFisher.Controls"
-        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
         x:Class="ApoFisher.Views.MainView"
         x:CompileBindings="True"
 		x:DataType="vm:MainViewModel"
 		Title="ApoFisher"
-		Width="950"
-		Height="600"
-		MinWidth="950"
+		MinWidth="1075"
 		MinHeight="600"
 		WindowStartupLocation="CenterOwner"
 		>
@@ -32,6 +29,7 @@
 			<ColumnDefinition Width="75"/>
 			<ColumnDefinition Width="{Binding PlayerViewCD}"/>
 			<ColumnDefinition Width="*"/>
+			<!-- <ColumnDefinition Width="{Binding WorkspaceViewCD}"/> -->
 		</Grid.ColumnDefinitions>
 
 			<Grid Grid.Column="0" Grid.RowDefinitions="*,*" Background="#c0002a20">
@@ -44,8 +42,10 @@
 				</StackPanel>
 			</Grid>
 			<UserControl Grid.Column="1" Content="{Binding CurrentViewModel}"/>
-			<UserControl Grid.Column="2" Content="{Binding CurrentLocation}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			<UserControl Grid.Column="2" Content="{Binding CurrentLocation}"/>
 			<!-- <UserControl Grud.Column="3" Content="{Binding CurrentWorkStation}"/>	 -->
+			 <!-- <Rectangle Grid.Column="3" Fill="#aa0"/> -->
+			 <!-- <ContentControl Grid.Column="3" Content="{Binding WorkspaceContent}"/> -->
 		</Grid>
 		<UserControl IsVisible="{Binding SettingsVisible}">
 			<vm:SettingsViewModel/>

@@ -17,7 +17,7 @@
 				<Border PointerPressed="OnPointerPressed">
 					<ItemsControl ItemsSource="{Binding InventorySlots}">
 						<ItemsControl.ItemContainerTheme>
-							<ControlTheme TargetType="ContentPresenter" x:DataType="ds:PlayerInventorySlot">
+							<ControlTheme TargetType="ContentPresenter" x:DataType="ds:InventorySlot">
 								<Setter Property="Canvas.Top" Value="{Binding TopOffset}"/>
 								<Setter Property="Canvas.Left" Value="{Binding LeftOffset}"/>
 							</ControlTheme>
@@ -35,6 +35,7 @@
 															SlotY				="{Binding SlotY}"
 															Occupied			="{Binding Occupied}"
 															ItemID              ="{Binding ItemID}"
+															Inventory			="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).Inventory}"
 															SlotBackground		="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotBackground}"
 															SlotBackgroundSize	="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
 															Width				="{Binding $parent[v:InventoryView].((vm:InventoryViewModel)DataContext).SlotSize}"
@@ -48,7 +49,7 @@
 				<Border>
 					<ItemsControl ItemsSource="{Binding InventoryItems}">
 						<ItemsControl.ItemContainerTheme>
-							<ControlTheme TargetType="ContentPresenter" x:DataType="ds:PlayerInventoryItem">
+							<ControlTheme TargetType="ContentPresenter" x:DataType="ds:InventoryItem">
 								<Setter Property="Canvas.Top" Value="{Binding IconPositionY}"/>
 								<Setter Property="Canvas.Left" Value="{Binding IconPositionX}"/>
 							</ControlTheme>
@@ -72,7 +73,7 @@
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 						<ItemsControl.Styles>
-							<Style Selector="Border" x:DataType="ds:PlayerInventoryItem">
+							<Style Selector="Border" x:DataType="ds:InventoryItem">
 								<Setter Property="BorderThickness" Value="{Binding BorderBrushThickness}"/>
 							</Style>
 						</ItemsControl.Styles>

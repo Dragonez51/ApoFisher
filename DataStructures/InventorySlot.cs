@@ -2,7 +2,7 @@
 
 namespace ApoFisher.DataStructures;
 
-public partial class PlayerInventorySlot : ObservableObject
+public partial class InventorySlot : ObservableObject
 {
     // Slot properties
     [ObservableProperty]
@@ -18,13 +18,13 @@ public partial class PlayerInventorySlot : ObservableObject
     public int LeftOffset       { get; private set; } 
     public int TopOffset        { get; private set; }
 
-    public PlayerInventorySlot(int SlotX, int SlotY) 
+    public InventorySlot(int SlotX, int SlotY) 
     {
         this.SlotX = SlotX;
         this.SlotY = SlotY;
         Occupied = false;
-        LeftOffset = SlotX * PlayerInventory.SlotSize;
-        TopOffset = SlotY * PlayerInventory.SlotSize;
+        LeftOffset = SlotX * Inventory.SlotSize;
+        TopOffset = SlotY * Inventory.SlotSize;
     }
 
     public void ToggleOccupied() => Occupied = !Occupied; 

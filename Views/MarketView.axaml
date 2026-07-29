@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"		
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="clr-namespace:ApoFisher.ViewModels"
+             xmlns:ctrl="clr-namespace:ApoFisher.Controls"
+			 x:Class="ApoFisher.Views.MarketView"
+             x:DataType="vm:MarketViewModel"
+			 >
+    <Grid ColumnDefinitions="*,350">
+        <Border Grid.Column="0" BorderBrush="#090" BorderThickness="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Text="Here will be market bg" FontSize="20" TextWrapping="Wrap"/>
+                <Button Command="{Binding RouteVillage}" Content="Back"/>
+            </StackPanel>    
+            <!-- <Image Source="{Binding MarketBG}"/>     -->
+        </Border>
+        <Grid Grid.Column="1" RowDefinitions="*, 75">
+            <UserControl Grid.Row="0" Content="{Binding InventoryVM}"/>
+            <Border Grid.Row="1" BorderBrush="#a07" BorderThickness="3" Background="#060">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="30">
+                    <Border BorderBrush="AliceBlue" Background="#0a0" CornerRadius="3" BorderThickness="3">
+                        <Button Margin="10" FontSize="20" FontWeight="Bold" Content="SELL" Foreground="#a07" Command="{Binding CalculateValue}"/>    
+                    </Border>
+                    <Border BorderBrush="AliceBlue" Background="#0a0" CornerRadius="3" BorderThickness="3">
+                        <TextBlock Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Text="{Binding CalculatedValue}" Foreground="#a07"/>    
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
