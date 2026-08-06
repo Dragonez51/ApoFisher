@@ -5,10 +5,7 @@
              x:DataType="vm:TraverseViewModel"
 			 >
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
-        <!-- <TextBlock Text="Hello Amir this is Traverse!" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
-        <!-- <Canvas Name="Map"> -->
-        <!-- </Canvas> -->
-        <ContentPage Content="{Binding Viewport}"/>
+        <ContentControl Content="{Binding Viewport}"/>
         <Button HorizontalAlignment="Center" Command="{Binding RouteVillage}">BACK</Button>
     </StackPanel>
 </UserControl>
