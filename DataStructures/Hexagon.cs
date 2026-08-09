@@ -1,6 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
@@ -32,26 +31,22 @@ public class Hexagon : Shape
 
     public Hexagon() : base()
     {   
-        Stroke = Brush.Parse("#600");
-        Fill = Brush.Parse("#a00");
-        Initialize();
+        InitDefault();
+        SetUp();
     }
 
     public Hexagon(double size) : base()
     {
         Size = size;
-        Stroke = Brush.Parse("#060");
-        Fill = Brush.Parse("#0a0");
-        Initialize();
+        InitDefault();
     }
     
     public Hexagon(int x, int y) : base()
     {
         X = x;
         Y = y;
-        Stroke = Brush.Parse("#006");
-        Fill = Brush.Parse("#00a");
-        Initialize();
+        InitDefault();
+        SetUp();
     }
 
     public Hexagon(double size, int x, int y) : base()
@@ -59,22 +54,47 @@ public class Hexagon : Shape
         Size = size;
         X = x;
         Y = y;
-        Stroke = Brush.Parse("#606");
-        Fill = Brush.Parse("#a0a");
-        Initialize();
+        InitDefault();
     }
 
-    private void Initialize()
+    private void InitDefault()
     {
-        StrokeThickness = 3;
-        SetPoints();
+        StrokeThickness = 1;
+        Stroke = Brush.Parse("#040");
+        Fill = Brush.Parse("#060");
     }
 
     #endregion 
 
+    #region Calculations
+
+    private void SetUp()
+    {
+        CalculateHypotenuse(); // depends on Size.
+        CalculateDimensions(); // depends on hypotenuse.
+        CalculateCanvasProperties(); // depends on dimensions.
+        SetPoints(); // depends on Size and hypotenuse.
+    }
+
+    private void CalculateHypotenuse()
+    {
+        _hypotenuse = Math.Round(Math.Sqrt(2.0) * Size);
+    }
+
+    private void CalculateDimensions()
+    {
+        Height = Size + _hypotenuse + Size;
+        Width = _hypotenuse * 2;
+    }
+
+    private void CalculateCanvasProperties()
+    {
+        this[Canvas.LeftProperty] = (Y % 2 == 0) ? Math.Round((X * Width) + (Width / 2.0)) : Math.Round(X * Width);
+        this[Canvas.TopProperty] = Y * (Size + _hypotenuse);
+    }
+
     private void SetPoints()
     {
-        CalculateHypotenuse();
         var heightOffset = Height/2.0;
         _points = new ()
         {
@@ -86,25 +106,6 @@ public class Hexagon : Shape
             new Point(0 - _hypotenuse, Size - heightOffset),
             new Point(0, -heightOffset)
         };
-    }
-
-    #region Calculations
-
-    private void CalculateHypotenuse()
-    {
-        _hypotenuse = Math.Sqrt(2.0) * Size;
-    }
-
-    private void CalculateDimensions()
-    {
-        Height = Size + _hypotenuse + Size;
-        Width = _hypotenuse * 2;
-    }
-
-    private void CalculateCanvasProperties()
-    {
-        this[Canvas.LeftProperty] = (Y % 2 == 0) ? (X * Width) + (Width / 2.0) : X * Width;
-        this[Canvas.TopProperty] = Y * (Size + _hypotenuse);
     }
 
     #endregion
@@ -120,15 +121,9 @@ public class Hexagon : Shape
     {
         base.OnPropertyChanged(change);
 
-        if(change.Property == SizeProperty
-            || change.Property == XProperty
-            || change.Property == YProperty
-            || change.Property == WidthProperty
-            || change.Property == HeightProperty)
+        if(change.Property == SizeProperty)
         {
-            CalculateDimensions();
-            CalculateCanvasProperties();
-            SetPoints();
+            SetUp();
         }
     }
 

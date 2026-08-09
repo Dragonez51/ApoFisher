@@ -33,6 +33,15 @@ public class HexMap
         GenerateTiles();
     }
 
+    public HexMap(Hexagon tile, int rows, int cols)
+    {
+        _rows = rows;
+        _cols = cols;
+        _tileSize = tile.Size;
+        Tiles = new ();
+        GenerateTiles(tile);
+    }
+
     private void GenerateTiles()
     {
         for(int y = 0; y < _rows; y++)
@@ -40,6 +49,22 @@ public class HexMap
             for(int x = 0; x < _cols; x++)
             {
                 Tiles.Add(new Hexagon(20.0, x, y));
+            }
+        }
+    }
+
+    private void GenerateTiles(Hexagon tile)
+    {
+        for(int y = 0; y < _rows; y++)
+        {
+            for(int x = 0; x < _cols; x++)
+            {
+                Hexagon tempTile = new Hexagon(x, y);
+                tempTile.Stroke = tile.Stroke;
+                tempTile.Fill = tile.Fill;
+                tempTile.Size = tile.Size;
+                tempTile.StrokeThickness = tile.StrokeThickness;
+                Tiles.Add(tempTile);
             }
         }
     }

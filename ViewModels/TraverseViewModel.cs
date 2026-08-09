@@ -16,11 +16,16 @@ public partial class TraverseViewModel : ViewModelBase
 
     public TraverseViewModel()
     {
-        _map = new HexMap(12, 10);
+        Hexagon tempTile = new Hexagon(20.0);
+        tempTile.Stroke = Brush.Parse("#004400");
+        tempTile.Fill = Brush.Parse("#006600");
+        tempTile.StrokeThickness = 1;
+
+        _map = new HexMap(tempTile, 14, 19);
         Viewport = new Canvas();
         Viewport.Background = Brush.Parse("#777");
-        Viewport.Width = 500;
-        Viewport.Height = 500;
+        Viewport.Width = 1000;
+        Viewport.Height = 600;
         foreach(var tile in Tiles)
         {
             Viewport.Children.Add(tile);
