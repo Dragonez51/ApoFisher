@@ -9,10 +9,6 @@ public partial class MarketViewModel : ViewModelBase
     public ViewModelBase? InventoryVM   { get; private set; }
     public Inventory MarketInventory    { get; init; }
 
-    private double? _calculatedValue = 0.0;
-    public double? CalculatedValue { get => _calculatedValue; set => SetProperty(ref _calculatedValue, value); }
-    // public double? CalculatedValue       { get; private set; } = 0.0;
-
     public int InvWidth                 { get => 5;  }
     public int InvHeight                { get => 8;  }
 
@@ -23,5 +19,5 @@ public partial class MarketViewModel : ViewModelBase
     }
 
     [RelayCommand] public void RouteVillage() => MainViewModel.RouteLocation("Village");
-    [RelayCommand] public void CalculateValue() => CalculatedValue = MarketInventory.CalculateValue();
+    public void Sell(){ MainViewModel.Player.GetStatistics().Money += MarketInventory.Value; MarketInventory.ClearInventory(); }
 }

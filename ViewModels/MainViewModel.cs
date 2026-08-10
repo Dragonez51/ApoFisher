@@ -8,8 +8,6 @@ public partial class MainViewModel : ViewModelBase
     private static MainViewModel? _self;
     public static Player Player = new Player(5, 9);
 
-    // public Bitmap MenuLogo { get => ImgDB.Get("Menu"); }
-
     private ViewModelBase? _currentViewModel;
     public ViewModelBase? CurrentViewModel { get => _currentViewModel; set => SetProperty(ref _currentViewModel, value); }
     private ViewModelBase? _currentLocation;
@@ -63,13 +61,15 @@ public partial class MainViewModel : ViewModelBase
                 throw new System.Exception("[MainViewModel] RouteLocation() -> Invalid argument => "+locationName);
         }
     }
-
     public static void Route(string pageName) 
     {
         switch (pageName) 
         {
             case "Inventory":
                 _self?.RouteInventory();
+                break;
+            case "Statistics":
+                _self?.RouteStatistics();
                 break;
             case "Glossary":
                 _self?.RouteGlossary();
@@ -91,12 +91,20 @@ public partial class MainViewModel : ViewModelBase
         CurrentViewModel = new InventoryViewModel(Player.GetInventory());
         PlayerViewCD = GridLength.Parse("350");
     }
+    public void RouteStatistics()
+    {
+        if(CurrentViewModel is StatisticsViewModel) { CurrentViewModel = null; PlayerViewCD = GridLength.Parse("0"); return; }
+        CurrentViewModel = new StatisticsViewModel();
+        PlayerViewCD = GridLength.Parse("350");
+    }
+
     public void RouteGlossary()
     { 
         if(CurrentViewModel is GlossaryViewModel) { CurrentViewModel = null; return; }
         CurrentViewModel = new GlossaryViewModel();    
     }
     public void RouteSettings() => SwitchSettingsVisibility();
+
     public void RouteTraverse() => CurrentLocation = new TraverseViewModel();
     public void RouteVillage() 
     {
@@ -109,7 +117,6 @@ public partial class MainViewModel : ViewModelBase
         CurrentLocation = new MarketViewModel();
         // WorkspaceViewCD = GridLength.Parse("300");
     }
-
     private void RouteLake(int lvl) => CurrentLocation = new LakeViewModel(lvl);
 
     public void SwitchStatusVisibility() => StatusVisibility = !StatusVisibility;

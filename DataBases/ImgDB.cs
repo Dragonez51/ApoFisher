@@ -14,6 +14,7 @@ public class ImgDB
         {   "InventoryLogo"         ,       GetIcon(9, 8)                                       },
         {   "GlossaryLogo"          ,       GetIcon(8,13)                                       },
         {   "TraverseLogo"          ,       GetIcon(12, 13)                                     },
+        {   "StatisticsLogo"        ,       GetIcon(8, 3)                                       },
         {   "SettingsLogo"          ,       BitmapHelper.Load("Images/Settings.png")            },
         //                 Fish    
         {   "Bulbo"                 ,       BitmapHelper.Load("Images/Bulbo.png")               },

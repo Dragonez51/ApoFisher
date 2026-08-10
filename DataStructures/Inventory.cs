@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ApoFisher.DataStructures;
 
-public class Inventory
+public partial class Inventory : ObservableObject
 {
     #region Inventory Properties
     
@@ -15,6 +16,9 @@ public class Inventory
     private static int _defaultSize = 6;
     public static int SlotSize { get => 64; }
     public static int CanvasOffset { get => 16; }
+
+    private double _value;
+    public double Value { get => _value; set => SetProperty(ref _value, value); }
 
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -100,17 +104,37 @@ public class Inventory
         var newItem = new InventoryItem(item, x, y);
         InventoryItems.Add(newItem);
 
-        FlushItemSlots(newItem, x, y);       
+        FlushItemSlots(newItem, x, y);    
+        CalculateValue();   
     }
 
     #endregion
 
     #region Item Deletion
 
+    public void ClearInventory()
+    {
+        // data set cannot be modified within a foreach,
+        // thus we have to do it this way, and are unable to do with a single loop.
+
+        int[] ids = new int[InventoryItems.Count];
+        int indexer = 0;
+        foreach(var item in InventoryItems)
+        {
+            ids[indexer++] = item.ItemID;
+        }
+
+        foreach(var id in ids)
+        {
+            DeleteItem(id);
+        }
+    }
+
     public void DeleteItem(int itemID)
     {
         DeleteItemUI(itemID);
         DeleteItemStructure(itemID);
+        CalculateValue();
     }
 
     private void DeleteItemUI(int itemID)
@@ -176,6 +200,19 @@ public class Inventory
         }
     }
 
+    public void CalculateValue()
+    {
+        double? value = 0.0;
+        foreach(var item in InventoryItems)
+        {
+            value += (item.Item as Fish)?.GetValue();
+        }
+
+        double value2 = value is null ? 0 : (double)value;
+
+        Value = Math.Round(value2, 2);
+    }
+
     #endregion
 
     #region Check functions
@@ -235,17 +272,6 @@ public class Inventory
             if(item.ItemID == itemID) return item;
         }
         throw new Exception("[Inventory] GetItem() => itemID not found!");
-    }
-
-    public double? CalculateValue()
-    {
-        double? value = 0.0;
-        foreach(var item in InventoryItems)
-        {
-            if(!(item.Item is Fish)) continue; 
-            value += (item.Item as Fish)?.GetValue();
-        }
-        return value;
     }
 
     #endregion

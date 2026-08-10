@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using ApoFisher.Controls;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace ApoFisher.ViewModels;
 
@@ -50,9 +49,9 @@ public class InventoryViewModel : ViewModelBase
     {
         // yes, I'm aware that it can't be null, but VSCode is not and I want clean code without any warnings :)
         if(_selectedItem is null) throw new System.Exception("[InventoryViewModel] SecondClick() => _selectedItem is null!");
-        if(_selectedInventory?.ID != Inventory.ID)
+        if(_selectedInventory is null) throw new System.Exception("[InventoryViewModel] SecondClick() => _selectedInventory is null!");
+        if(_selectedInventory.ID != Inventory.ID)
         {
-            // Debug.WriteLine("[InventoryViewModel] SecondClick() => _selectedInventory.ID == ");
             _selectedItem.DeSelectItem();
             Inventory.MoveItemFrom(_selectedInventory, _selectedItem.ItemID, slot.SlotX, slot.SlotY);
             _selectedItem = null;

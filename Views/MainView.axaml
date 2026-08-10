@@ -35,6 +35,7 @@
 			<Grid Grid.Column="0" Grid.RowDefinitions="*,*" Background="#c0002a20">
 				<StackPanel Grid.Row="0" Orientation="Vertical">
 					<ctrl:RoutingButton RoutingName="Inventory"/>
+					<ctrl:RoutingButton RoutingName="Statistics"/>
 				</StackPanel>
 				<StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Bottom">	
 					<ctrl:RoutingButton RoutingName="Glossary"/>
