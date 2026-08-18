@@ -16,12 +16,7 @@ public partial class TraverseViewModel : ViewModelBase
 
     public TraverseViewModel()
     {
-        Hexagon tempTile = new Hexagon(20.0);
-        tempTile.Stroke = Brush.Parse("#004400");
-        tempTile.Fill = Brush.Parse("#006600");
-        tempTile.StrokeThickness = 1;
-
-        _map = new HexMap(tempTile, 14, 19);
+        _map = new HexMap(26, 37, 10.0);
         Viewport = new Canvas();
         Viewport.Background = Brush.Parse("#777");
         Viewport.Width = 1000;
