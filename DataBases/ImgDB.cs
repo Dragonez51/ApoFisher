@@ -66,6 +66,15 @@ public class ImgDB
         {   "Collapse"              ,       BitmapHelper.Load("Images/ShrinkIcon.png")          },
         {   "InventorySlot"         ,       BitmapHelper.Load("Images/InventorySlot.png")       },
         {   "Menu"                  ,       BitmapHelper.Load("Images/FishMenu.png")            },
+        {   "Woods32"               ,       BitmapHelper.Load("Images/Woods32.png")             },
+        {   "Woods48"               ,       BitmapHelper.Load("Images/Woods48.png")             },
+        {   "Woods64"               ,       BitmapHelper.Load("Images/Woods64.png")             },
+        {   "Lake32"                ,       BitmapHelper.Load("Images/Lake32.png")              },
+        {   "Lake48"                ,       BitmapHelper.Load("Images/Lake48.png")              },
+        {   "Lake64"                ,       BitmapHelper.Load("Images/Lake64.png")              },
+        {   "Village32"             ,       BitmapHelper.Load("Images/Village32.png")           },
+        {   "Village48"             ,       BitmapHelper.Load("Images/Village48.png")           },
+        {   "Village64"             ,       BitmapHelper.Load("Images/Village64.png")           },
     };
 
     private static Bitmap GetIcon(int column, int row) 
