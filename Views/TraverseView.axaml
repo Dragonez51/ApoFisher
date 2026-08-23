@@ -1,16 +1,15 @@
 <UserControl xmlns="https://github.com/avaloniaui"		
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:vm="clr-namespace:ApoFisher.ViewModels"
-             xmlns:ctrl="clr-namespace:ApoFisher.Controls"
 			 x:Class="ApoFisher.Views.TraverseView"
              x:DataType="vm:TraverseViewModel"
 			 >
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
-        <ctrl:GameMapControl Name="HexMap" Rows="24" Cols="26" ViewportWidth="800" ViewportHeight="500"/>
+        <ContentControl Content="{Binding Map}"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Zoom In" Command="{Binding #HexMap.ZoomIn}"/>
+            <Button Content="Zoom In" Command="{Binding Map.ZoomIn}"/>
             <Button HorizontalAlignment="Center" Command="{Binding RouteVillage}">BACK</Button>
-            <Button Content="Zoom Out" Command="{Binding #HexMap.ZoomOut}"/>
+            <Button Content="Zoom Out" Command="{Binding Map.ZoomOut}"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

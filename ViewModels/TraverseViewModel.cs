@@ -1,8 +1,10 @@
-using CommunityToolkit.Mvvm.Input;
+using ApoFisher.Controls;
 
 namespace ApoFisher.ViewModels;
 
 public partial class TraverseViewModel : ViewModelBase
 {
-    [RelayCommand] public void RouteVillage() => MainViewModel.RouteLocation("Village");
+    public GameMapControl Map { get; private set; } = new(24, 26, 800, 500);
+
+    public void RouteVillage() => MainViewModel.RouteLocation("Village");
 }

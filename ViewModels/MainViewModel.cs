@@ -8,7 +8,6 @@ public partial class MainViewModel : ViewModelBase
 {
     private static MainViewModel? _self;
     public static Player Player = new Player(5, 8);
-    private static TraverseViewModel TVM = new ();
 
     // public Bitmap MenuLogo { get => ImgDB.Get("Menu"); }
 
@@ -91,7 +90,7 @@ public partial class MainViewModel : ViewModelBase
         CurrentViewModel = new GlossaryViewModel();    
     }
     [RelayCommand] public void RouteSettings() => SwitchSettingsVisibility();
-    [RelayCommand] public void RouteTraverse() => CurrentLocation = TVM;
+    [RelayCommand] public void RouteTraverse() => CurrentLocation = new TraverseViewModel();
     [RelayCommand] public void RouteVillage() => CurrentLocation = new VillageViewModel();
 
     [RelayCommand] private void RouteLake(int lvl) => CurrentLocation = new LakeViewModel(lvl);
