@@ -75,6 +75,9 @@ public class ImgDB
         {   "Village32"             ,       BitmapHelper.Load("Images/Village32.png")           },
         {   "Village48"             ,       BitmapHelper.Load("Images/Village48.png")           },
         {   "Village64"             ,       BitmapHelper.Load("Images/Village64.png")           },
+        {   "SelectedTile32"        ,       BitmapHelper.Load("Images/SelectedTile32.png")      },
+        {   "SelectedTile48"        ,       BitmapHelper.Load("Images/SelectedTile48.png")      },
+        {   "SelectedTile64"        ,       BitmapHelper.Load("Images/SelectedTile64.png")      },
     };
 
     private static Bitmap GetIcon(int column, int row) 

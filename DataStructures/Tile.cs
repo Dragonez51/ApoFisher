@@ -12,7 +12,8 @@ public class Tile
     public int CanvasLeft { get; private set; }
     public int CanvasTop { get; private set; }
     public bool IsVisible { get; private set; } = true;
-    public Bitmap Image { get => ImgDB.Get(TileType +""+ Size); }
+    public bool IsSelected { get; private set; } = false;
+    public Bitmap Image { get => !IsSelected ? ImgDB.Get(TileType +""+ Size) : ImgDB.Get("SelectedTile"+Size); }
     public string TileType { get; private set; } = "Woods";
 
     public Tile(int x, int y, int size)
@@ -41,4 +42,6 @@ public class Tile
     public void SetIsVisible(bool isVisible) => IsVisible = isVisible;
     public void SetTileType(string tileType) => TileType = tileType;
     public void SetTileSize(int size){ Size = size; CalculateCanvasOffset(); }
+
+    public void SetSelected(bool isSelected) => IsSelected = isSelected;
 }
