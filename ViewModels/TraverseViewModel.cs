@@ -1,20 +1,10 @@
-using Avalonia.Controls;
-using CommunityToolkit.Mvvm.Input;
+using ApoFisher.Controls;
 
 namespace ApoFisher.ViewModels;
 
 public partial class TraverseViewModel : ViewModelBase
 {
-    private Map _map;
+    public GameMapControl Map { get; private set; } = new(24, 26, 800, 500);
 
-    private Canvas? _viewport;
-    public Canvas? Viewport { get => _viewport; set => SetProperty(ref _viewport, value); }
-    
-    public TraverseViewModel()
-    {
-        _map = new Map();
-        Viewport = _map.GetCanvas();
-    }
-
-    [RelayCommand] public void RouteVillage() => MainViewModel.RouteLocation("Village");
+    public void RouteVillage() => MainViewModel.RouteLocation("Village");
 }

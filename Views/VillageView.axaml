@@ -4,7 +4,7 @@
 			 x:Class="ApoFisher.Views.VillageView"
 			 x:DataType="vm:VillageViewModel"
 			 >
-	<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+	<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Blue" Height="600" Width="200">
 		<Border BorderBrush="AliceBlue" Background="BurlyWood" BorderThickness="2" Margin="15" CornerRadius="4"><Button HorizontalAlignment="Stretch" Command="{Binding RouteTraverse}"><Label HorizontalAlignment="Center">LAKE</Label></Button></Border> 
 		<Border BorderBrush="AliceBlue" Background="BurlyWood" BorderThickness="2" Margin="15" CornerRadius="4"><Button HorizontalAlignment="Stretch"><Label HorizontalAlignment="Center">BRIEFING</Label></Button></Border>	
 		<Border BorderBrush="AliceBlue" Background="BurlyWood" BorderThickness="2" Margin="15" CornerRadius="4"><Button HorizontalAlignment="Stretch"><Label HorizontalAlignment="Center">MARKET</Label></Button></Border>	
