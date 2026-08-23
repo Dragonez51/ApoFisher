@@ -6,7 +6,7 @@ namespace ApoFisher.DataStructures;
 public record ItemShapeData(bool[][] shape)
 {
     // public bool[][] shape { get => shape; }
-    public List<PlayerInventorySlot> ItemSlots { get; private set; } = [];
+    public List<InventorySlot> ItemSlots { get; private set; } = [];
     public int Width    { get; private set; } = 0;
     public int Height   { get; private set; } = 0;
     public int MinX     { get; private set; } = 0;
@@ -39,14 +39,14 @@ public record ItemShapeData(bool[][] shape)
                         startX = x;
                         startY = y;
                         // Debug.WriteLine("   [Root]["+x+"]["+y+"]");
-                        ItemSlots.Add(new PlayerInventorySlot(0, 0));
+                        ItemSlots.Add(new InventorySlot(0, 0));
                         continue;
                     }
                     var xcoord = x - startX;
                     if(xcoord < MinX) MinX = xcoord;
                     var ycoord = y - startY;
                     // Debug.WriteLine("   [Slot]["+xcoord+"]["+ycoord+"]");
-                    ItemSlots.Add(new PlayerInventorySlot(xcoord, ycoord));
+                    ItemSlots.Add(new InventorySlot(xcoord, ycoord));
                 }
             }
         }

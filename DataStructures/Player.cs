@@ -2,30 +2,19 @@
 
 public class Player
 {
-    private PlayerInventory Inventory;
-    private int _hp = 0;
-    private int _stamina = 0;
+    private Inventory Inventory;
 
-    private Statistics statistics = new Statistics();
+    private Statistics _statistics = new Statistics();
 
-    public Player() { Inventory = new PlayerInventory(); initialize(); }
-    public Player(int inventoryCapacity) { Inventory = new PlayerInventory(inventoryCapacity); initialize(); }
-    public Player(int inventoryWidth, int inventoryHeight) { Inventory = new PlayerInventory(inventoryWidth, inventoryHeight); initialize(); }
-    public Player(int strength, int dexterity, int intelligence, int maxHealth, int maxStamina){ Inventory = new PlayerInventory(); initialize(); }
-    public Player(int strength, int dexterity, int intelligence, int maxHealth, int maxStamina, int inventoryCapacity) { Inventory = new PlayerInventory(inventoryCapacity); initialize(); }
-
-    // TODO: Clear the statistics slop.
+    public Player() { Inventory = new Inventory(); initialize(); }
+    public Player(int inventoryCapacity) { Inventory = new Inventory(inventoryCapacity); initialize(); }
+    public Player(int inventoryWidth, int inventoryHeight) { Inventory = new Inventory(inventoryWidth, inventoryHeight); initialize(); }
     
     private void initialize()
     {
         // statistics = new Statistics();
-        _hp = 50;
-        _stamina = statistics.GetMaxStamina();
     }
 
-    public PlayerInventory GetInventory() => Inventory;
-    public int GetHP() => _hp;
-    public int GetMaxHP() => statistics.GetMaxHP();
-    public int GetStamina() => _stamina;
-    public int GetMaxStamina() => statistics.GetMaxStamina();
+    public Inventory GetInventory() => Inventory;
+    public Statistics GetStatistics() => _statistics;
 }

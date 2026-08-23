@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"		
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="clr-namespace:ApoFisher.ViewModels"
+             xmlns:ctrl="clr-namespace:ApoFisher.Controls"
+			 x:Class="ApoFisher.Views.StatisticsView"
+             x:DataType="vm:StatisticsViewModel"
+             Background="#070"
+			 >
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Background="#080">
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <TextBlock Text="Money: " Foreground="#a07" FontSize="30" FontWeight="Bold"/>
+            <TextBlock Text="{Binding PlayerStats.Money}" Foreground="#a07" FontSize="30" FontWeight="Bold"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

@@ -2,28 +2,37 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ApoFisher.DataStructures;
 
-public class PlayerInventory
+public partial class Inventory : ObservableObject
 {
     #region Inventory Properties
     
-    private int _defaultSize = 6;
-    public static int Width { get; private set; }
-    public static int Height { get; private set; }
+    public static int NextID = 0;
+    public int ID { get; private set; }
+
+    private static int _defaultSize = 6;
     public static int SlotSize { get => 64; }
     public static int CanvasOffset { get => 16; }
 
+    private double _value;
+    public double Value { get => _value; set => SetProperty(ref _value, value); }
+
+    public int Width { get; private set; }
+    public int Height { get; private set; }
+
     #endregion
 
-    public ObservableCollection<PlayerInventorySlot> InventorySlots { get; private set; } // list of inventory slots
-    public ObservableCollection<PlayerInventoryItem> InventoryItems { get; private set; } // list of items in inventory
+    public ObservableCollection<InventorySlot> InventorySlots { get; private set; } // list of inventory slots
+    public ObservableCollection<InventoryItem> InventoryItems { get; private set; } // list of items in inventory
 
     #region Initialization
 
-    public PlayerInventory() 
+    public Inventory() 
     {
+        ID = NextID++;
         InventorySlots = new ();
         InventoryItems = new ();
         Width = _defaultSize;
@@ -31,16 +40,18 @@ public class PlayerInventory
         GenerateSlots(_defaultSize, _defaultSize);
     }
 
-    public PlayerInventory(int size) 
+    public Inventory(int size) 
     {
+        ID = NextID++;
         InventorySlots = new ();
         InventoryItems = new ();
         Width = size;
         Height = size;
         GenerateSlots(size, size);
     }
-    public PlayerInventory(int width, int height) 
+    public Inventory(int width, int height) 
     {
+        ID = NextID++;
         InventorySlots = new ();
         InventoryItems = new ();
         Width = width;
@@ -52,7 +63,7 @@ public class PlayerInventory
     { 
         for (int y = 0; y < height; y++)
             for(int x = 0; x < width; x++)
-                InventorySlots.Add(new PlayerInventorySlot(x, y)); 
+                InventorySlots.Add(new InventorySlot(x, y)); 
     }
 
     #endregion
@@ -74,7 +85,7 @@ public class PlayerInventory
 
                 // if the path is clear, add this item
                 // starting from the currently checked slot
-                if (CheckItemShape(item.GetItemShape().ItemSlots, startX, startY))
+                if (CheckPath(item.GetItemShape().ItemSlots, startX, startY))
                 {
                     AddItemAt(item, startX, startY);
                     return;
@@ -90,20 +101,40 @@ public class PlayerInventory
     private void AddItemAt(Item item, int x, int y)
     {
         // Add to list:
-        var newItem = new PlayerInventoryItem(item, x, y);
+        var newItem = new InventoryItem(item, x, y);
         InventoryItems.Add(newItem);
 
-        FlushItemSlots(newItem, x, y);       
+        FlushItemSlots(newItem, x, y);    
+        CalculateValue();   
     }
 
     #endregion
 
     #region Item Deletion
 
+    public void ClearInventory()
+    {
+        // data set cannot be modified within a foreach,
+        // thus we have to do it this way, and are unable to do with a single loop.
+
+        int[] ids = new int[InventoryItems.Count];
+        int indexer = 0;
+        foreach(var item in InventoryItems)
+        {
+            ids[indexer++] = item.ItemID;
+        }
+
+        foreach(var id in ids)
+        {
+            DeleteItem(id);
+        }
+    }
+
     public void DeleteItem(int itemID)
     {
         DeleteItemUI(itemID);
         DeleteItemStructure(itemID);
+        CalculateValue();
     }
 
     private void DeleteItemUI(int itemID)
@@ -137,7 +168,7 @@ public class PlayerInventory
     public void MoveItem(int itemID, int x, int y)
     {
         var listItem = GetItem(itemID);
-        if(CheckItemShape(listItem.Item.GetItemShape().ItemSlots, itemID, x, y))
+        if(CheckPath(listItem.Item.GetItemShape().ItemSlots, itemID, x, y))
         {
             DeleteItemUI(itemID);
             listItem.MoveItem(x, y);
@@ -145,11 +176,21 @@ public class PlayerInventory
         }
     }
 
+    public void MoveItemFrom(Inventory inventory, int itemID, int x, int y)
+    {
+        var item = inventory.GetItem(itemID).Item;
+        if (CheckPath(item.GetItemShape().ItemSlots, x, y))
+        {
+            AddItemAt(item, x, y);
+            inventory.DeleteItem(itemID);
+        }
+    }
+
     #endregion
 
     #region Update functions
 
-    private void FlushItemSlots(PlayerInventoryItem listItem, int x, int y)
+    private void FlushItemSlots(InventoryItem listItem, int x, int y)
     {
         foreach(var itemSlot in listItem.Item.GetItemShape().ItemSlots)
         {
@@ -159,11 +200,24 @@ public class PlayerInventory
         }
     }
 
+    public void CalculateValue()
+    {
+        double? value = 0.0;
+        foreach(var item in InventoryItems)
+        {
+            value += (item.Item as Fish)?.GetValue();
+        }
+
+        double value2 = value is null ? 0 : (double)value;
+
+        Value = Math.Round(value2, 2);
+    }
+
     #endregion
 
     #region Check functions
 
-    private bool CheckItemShape(List<PlayerInventorySlot> itemSlots, int startX, int startY)
+    private bool CheckPath(List<InventorySlot> itemSlots, int startX, int startY)
     {
         for(int i=0; i<itemSlots.Count; i++)
         {
@@ -179,7 +233,8 @@ public class PlayerInventory
         return true;
     }
 
-    private bool CheckItemShape(List<PlayerInventorySlot> itemSlots, int itemID, int startX, int startY)
+    // check item shape path (exclude slots taken by the same item)
+    private bool CheckPath(List<InventorySlot> itemSlots, int itemID, int startX, int startY)
     {
         for(int i=0; i<itemSlots.Count; i++)
         {
@@ -201,22 +256,22 @@ public class PlayerInventory
 
     #region Get functions
 
-    private PlayerInventorySlot GetSlot(int x, int y)
+    private InventorySlot GetSlot(int x, int y)
     {
         foreach(var slot in InventorySlots)
         {
             if(slot.SlotX == x && slot.SlotY == y) return slot;
         }
-        throw new Exception("[PlayerInventory] GetSlotAt() Index out of range!");
+        throw new Exception("[Inventory] GetSlotAt() Index out of range!");
     }
 
-    public PlayerInventoryItem GetItem(int itemID)
+    public InventoryItem GetItem(int itemID)
     {
         foreach(var item in InventoryItems)
         {
             if(item.ItemID == itemID) return item;
         }
-        throw new Exception("[PlayerInventory] GetItem() => itemID not found!");
+        throw new Exception("[Inventory] GetItem() => itemID not found!");
     }
 
     #endregion

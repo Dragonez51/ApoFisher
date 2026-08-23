@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ApoFisher.DataStructures;
 
-public partial class PlayerInventoryItem : ObservableObject
+public partial class InventoryItem : ObservableObject
 {
     public static int MinID { get; set; } = 0;
 
@@ -21,11 +21,11 @@ public partial class PlayerInventoryItem : ObservableObject
     [ObservableProperty] private int _iconPositionY;
     [ObservableProperty] private Avalonia.Thickness _borderBrushThickness;
     public Bitmap Icon              { get => ImgDB.Get(Item.GetName()); }
-    public int IconWidth            { get => Item.GetItemShape().Width * PlayerInventory.SlotSize; }
-    public int IconHeight           { get => Item.GetItemShape().Height * PlayerInventory.SlotSize; }
+    public int IconWidth            { get => Item.GetItemShape().Width * Inventory.SlotSize; }
+    public int IconHeight           { get => Item.GetItemShape().Height * Inventory.SlotSize; }
     // public int BorderBrushThickness { get; private set; }
 
-    public PlayerInventoryItem(Item item, int rootX, int rootY)
+    public InventoryItem(Item item, int rootX, int rootY)
     {
         Item = item;
         RootX = rootX;
@@ -48,8 +48,8 @@ public partial class PlayerInventoryItem : ObservableObject
 
     private void SetIconPosition(int x, int y)
     {
-        IconPositionX = (x+Item.GetItemShape().MinX) * PlayerInventory.SlotSize;
-        IconPositionY = y * PlayerInventory.SlotSize;
+        IconPositionX = (x+Item.GetItemShape().MinX) * Inventory.SlotSize;
+        IconPositionY = y * Inventory.SlotSize;
     }
 
     public void SelectItem()   => BorderBrushThickness = SelectedBorderBrushThickness;

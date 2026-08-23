@@ -1,34 +1,19 @@
-﻿namespace ApoFisher.DataStructures;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class Statistics 
+namespace ApoFisher.DataStructures;
+
+public partial class Statistics : ObservableObject
 {
-    public int _strength;
-    public int _dexterity;
-    public int _intelligence;
-    public int _maxHealth;
-    public int _maxStamina;
-
+    private double _money;
+    public double Money { get => _money; set => SetProperty(ref _money, value); }
+    
     public Statistics() 
     {
-        _strength = 1;
-        _dexterity = 1;
-        _intelligence = 1;
-        _maxHealth = 100;
-        _maxStamina = 100;
+        Money = 0;
     }
 
-    public Statistics(int strength, int dexterity, int intelligence, int maxHealth, int maxStamina) 
+    public Statistics(double money)
     {
-        _strength = strength;
-        _dexterity = dexterity;
-        _intelligence = intelligence;
-        _maxHealth = maxHealth;
-        _maxStamina = maxStamina;
+        Money = money;
     }
-
-    public int GetStrength() => _strength;
-    public int GetDexterity() => _dexterity;
-    public int GetIntelligence() => _intelligence;
-    public int GetMaxHP() => _maxHealth;
-    public int GetMaxStamina() => _maxStamina;
 }
